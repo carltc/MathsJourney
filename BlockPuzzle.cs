@@ -29,6 +29,7 @@ namespace MathsJourney
         {
             // Hide unwanted UI
             this.GameResultLabel.Visible = false;
+            this.NewGameButton.Enabled = false;
 
             // Initialise new game
             CurrentMoves = 0;
@@ -93,7 +94,8 @@ namespace MathsJourney
 
         private bool GameEnded()
         {
-            if (CurrentMoves >= BlockPuzzleGrid.RequiredMoves)
+            // Check if there are any possible moves
+            if (!PossibleMoves())
             {
                 return true;
             }
@@ -106,12 +108,39 @@ namespace MathsJourney
                 return false;
         }
 
+        private bool PossibleMoves()
+        {
+            //Check up
+            if (BlockPuzzlePlayer.Location.Y - 1 >= 0 && BlockPuzzlePlayer.AllowedMove(0, -1))
+            {
+                return true;
+            }
+            //Check down
+            if (BlockPuzzlePlayer.Location.Y + 1 < BlockPuzzleGrid.GridSize && BlockPuzzlePlayer.AllowedMove(0, 1))
+            {
+                return true;
+            }
+            //Check left
+            if (BlockPuzzlePlayer.Location.X - 1 >= 0 && BlockPuzzlePlayer.AllowedMove(-1, 0))
+            {
+                return true;
+            }
+            //Check down
+            if (BlockPuzzlePlayer.Location.X + 1 < BlockPuzzleGrid.GridSize && BlockPuzzlePlayer.AllowedMove(1, 0))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void EndGame()
         {
             GameLive = false;
             if (BlockPuzzlePlayer.Value == BlockPuzzleGrid.Target)
             {
                 this.GameResultLabel.Text = "Completed!";
+                this.NewGameButton.Enabled = true;
             }
             else
             {

@@ -92,6 +92,7 @@
             // 
             // NewGameButton
             // 
+            this.NewGameButton.Enabled = false;
             this.NewGameButton.Location = new System.Drawing.Point(642, 374);
             this.NewGameButton.Name = "NewGameButton";
             this.NewGameButton.Size = new System.Drawing.Size(146, 40);

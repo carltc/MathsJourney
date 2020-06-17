@@ -24,25 +24,7 @@ namespace MathsJourney
 
         public static bool Move(int Xmove, int Ymove)
         {
-            // Check if move is within boundaries
-            if (Location.X + Xmove < 0 || Location.Y + Ymove < 0)
-            {
-                return false;
-            }
-            if(Location.X + Xmove >= BlockPuzzleGrid.GridSize || Location.Y + Ymove >= BlockPuzzleGrid.GridSize)
-            {
-                return false;
-            }
-
-            // Check if maths on block is allowed
-            BlockLocation newLocation = new BlockLocation(BlockPuzzlePlayer.Location.X + Xmove, BlockPuzzlePlayer.Location.Y + Ymove);
-            if(!MathsAllowed(newLocation))
-            {
-                return false;
-            }
-
-            // Don't allow going back to used space.
-            if (BlockPuzzleGrid.Grid[newLocation.X,newLocation.Y].Used == true)
+            if (!AllowedMove(Xmove,Ymove))
             {
                 return false;
             }
@@ -53,6 +35,34 @@ namespace MathsJourney
             // Calculate new value.
             BlockPuzzlePlayer.DoMaths(BlockPuzzleGrid.Grid[Location.X, Location.Y]);
             BlockPuzzleGrid.Grid[Location.X, Location.Y].Used = true;
+
+            return true;
+        }
+
+        public static bool AllowedMove(int Xmove, int Ymove)
+        {
+            // Check if move is within boundaries
+            if (Location.X + Xmove < 0 || Location.Y + Ymove < 0)
+            {
+                return false;
+            }
+            if (Location.X + Xmove >= BlockPuzzleGrid.GridSize || Location.Y + Ymove >= BlockPuzzleGrid.GridSize)
+            {
+                return false;
+            }
+
+            // Check if maths on block is allowed
+            BlockLocation newLocation = new BlockLocation(BlockPuzzlePlayer.Location.X + Xmove, BlockPuzzlePlayer.Location.Y + Ymove);
+            if (!MathsAllowed(newLocation))
+            {
+                return false;
+            }
+
+            // Don't allow going back to used space.
+            if (BlockPuzzleGrid.Grid[newLocation.X, newLocation.Y].Used == true)
+            {
+                return false;
+            }
 
             return true;
         }
