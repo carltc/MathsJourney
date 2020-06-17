@@ -1,0 +1,11 @@
+C:\Users\Carl\source\repos\MathsJourney\bin\Debug\MathsJourney.exe.config
+C:\Users\Carl\source\repos\MathsJourney\bin\Debug\MathsJourney.exe
+C:\Users\Carl\source\repos\MathsJourney\bin\Debug\MathsJourney.pdb
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.csprojAssemblyReference.cache
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.Properties.Resources.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.csproj.GenerateResource.cache
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.csproj.CoreCompileInputs.cache
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.exe
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.pdb
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.BlockHunt.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.BlockPuzzle.resources
