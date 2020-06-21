@@ -14,12 +14,13 @@ namespace MathsJourney
         public static List<int> Targets { get; set; }
         public static int Level { get; set; }
 
-        public static void Initiate(List<BlockLocation> locations, List<int> startValues)
+        public static void Initiate(List<BlockLocation> locations, List<int> startValues, List<int> targets)
         {
             // Set player starting values
             BlockPuzzlePlayer.Locations = locations.Select(item => item.copy()).ToList();
             BlockPuzzlePlayer.Level = 1;
             BlockPuzzlePlayer.Values = startValues.Select(item => item).ToList();
+            BlockPuzzlePlayer.Targets = targets.Select(item => item).ToList();
         }
 
         public static bool Move(int puzzleID, int Xmove, int Ymove)
@@ -35,12 +36,19 @@ namespace MathsJourney
             // Calculate new value.
             BlockPuzzlePlayer.DoMaths(puzzleID, BlockPuzzleGrid.Grid[Locations[puzzleID].X, Locations[puzzleID].Y]);
             BlockPuzzleGrid.Grid[Locations[puzzleID].X, Locations[puzzleID].Y].Used = true;
+            BlockPuzzleGrid.Grid[Locations[puzzleID].X, Locations[puzzleID].Y].Colour = BlockPuzzleGrid.Colours[puzzleID];
 
             return true;
         }
 
         public static bool AllowedMove(int puzzleID, int Xmove, int Ymove)
         {
+            // Check if puzzle completed already
+            if (Values[puzzleID] == Targets[puzzleID])
+            {
+                return false;
+            }
+
             // Check if move is within boundaries
             if (Locations[puzzleID].X + Xmove < 0 || Locations[puzzleID].Y + Ymove < 0)
             {

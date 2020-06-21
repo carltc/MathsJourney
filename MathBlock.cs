@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,6 +14,7 @@ namespace MathsJourney
         public int Value { get; set; }
         public MathFunction Function { get; set; }
         public bool Used { get; set; }
+        public Color Colour { get; set; }
 
         public MathBlock(int value, MathFunction mathFunction, BlockLocation blockLocation)
         {
@@ -20,6 +22,7 @@ namespace MathsJourney
             Function = mathFunction;
             Location = blockLocation;
             Used = false;
+            Colour = Color.Black;
         }
 
     }

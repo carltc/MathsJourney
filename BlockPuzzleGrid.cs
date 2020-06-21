@@ -78,7 +78,7 @@ namespace MathsJourney
                         Colours.Add(Color.Purple);
                         break;
                     case 4:
-                        Colours.Add(Color.Black);
+                        Colours.Add(Color.LightGray);
                         break;
                     case 5:
                         Colours.Add(Color.Coral);
@@ -124,7 +124,7 @@ namespace MathsJourney
                         Grid[CurrentLocations[i].X, CurrentLocations[i].Y] = GetRandomMathBlocks(rand, new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y));
 
                         // Check if block is allowed and if not create a new one
-                        while (!BlockAllowed(CurrentValues[i], Grid[CurrentLocations[i].X, CurrentLocations[i].Y]))
+                        while (!BlockAllowed(CurrentValues[i], Grid[CurrentLocations[i].X, CurrentLocations[i].Y], Targets[i]))
                         {
                             Grid[CurrentLocations[i].X, CurrentLocations[i].Y] = GetRandomMathBlocks(rand, new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y));
                         }
@@ -176,6 +176,7 @@ namespace MathsJourney
 
                             // Set start location as used to prevent it happening
                             Grid[CurrentLocations[i].X, CurrentLocations[i].Y].Used = true;
+                            Grid[CurrentLocations[i].X, CurrentLocations[i].Y].Colour = Colours[i];
                         }
                     }
                 }
@@ -239,7 +240,7 @@ namespace MathsJourney
             return true;
         }
 
-        public static bool BlockAllowed(int value, MathBlock block)
+        public static bool BlockAllowed(int value, MathBlock block, int target)
         {
             // Check if division is allowed
             switch(block.Function)
@@ -263,6 +264,13 @@ namespace MathsJourney
             {
                 return false;
             }
+
+            // Check if next value is same as target
+            if (CalculateReverseBlock(value, block) == target)
+            {
+                return false;
+            }
+
 
             return true;
         }
@@ -338,53 +346,64 @@ namespace MathsJourney
         {
             Pen blockPen;
             SolidBrush blockBrush = null;
+            Font drawFont = new Font("Arial", 15);
+
             string blockText = "";
             if (BlockPuzzlePlayer.Locations.FindIndex(a => a == mathBlock.Location) >= 0)
             {
-                // get player index
-                int playerID = BlockPuzzlePlayer.Locations.FindIndex(i => i == mathBlock.Location);
+                // get puzzle index
+                int puzzleID = BlockPuzzlePlayer.Locations.FindIndex(i => i == mathBlock.Location);
 
                 // Create pen.
-                blockPen = new Pen(Colours[playerID], 8);
+                blockPen = new Pen(Colours[puzzleID], 8);
 
-                blockText = BlockPuzzlePlayer.Values[playerID].ToString();
+                blockText = BlockPuzzlePlayer.Values[puzzleID].ToString();
+
+                // Set font
+                drawFont = new Font("Arial", 20, FontStyle.Bold);
+
+                // Check if target reached
+                if (BlockPuzzleGrid.Targets[puzzleID] == BlockPuzzlePlayer.Values[puzzleID])
+                {
+                    blockBrush = new SolidBrush(Colours[puzzleID]);
+                }
             }
             else
             {
                 if (mathBlock.Used)
                 {
-                    blockPen = new Pen(Color.Gray, 5);
+                    blockPen = new Pen(mathBlock.Colour, 5);
+                    blockBrush = new SolidBrush(mathBlock.Colour);
                 }
                 else
                 {
-                    // Create pen.
                     blockPen = new Pen(Color.Black, 3);
-
-                    // Set up block text
-                    string valueString = mathBlock.Value.ToString();
-                    // Get function sign
-                    string functionString = "";
-                    switch (mathBlock.Function)
-                    {
-                        case MathFunction.Add:
-                            functionString = "+";
-                            break;
-                        case MathFunction.Subtract:
-                            functionString = "-";
-                            break;
-                        case MathFunction.Multiply:
-                            functionString = "x";
-                            break;
-                        case MathFunction.Divide:
-                            functionString = "÷";
-                            //if (BlockPuzzlePlayer.Value%mathBlock.Value != 0)
-                            //{
-                            //    blockBrush = new SolidBrush(Color.Red);
-                            //}
-                            break;
-                    }
-                    blockText = functionString + " " + valueString;
                 }
+
+                // Set up block text
+                string valueString = mathBlock.Value.ToString();
+                // Get function sign
+                string functionString = "";
+                switch (mathBlock.Function)
+                {
+                    case MathFunction.Add:
+                        functionString = "+";
+                        break;
+                    case MathFunction.Subtract:
+                        functionString = "-";
+                        break;
+                    case MathFunction.Multiply:
+                        functionString = "x";
+                        break;
+                    case MathFunction.Divide:
+                        functionString = "÷";
+                        //if (BlockPuzzlePlayer.Value%mathBlock.Value != 0)
+                        //{
+                        //    blockBrush = new SolidBrush(Color.Red);
+                        //}
+                        break;
+                }
+                blockText = functionString + " " + valueString;
             }
 
             // Create rectangle.
@@ -403,7 +422,6 @@ namespace MathsJourney
 
             e.Graphics.DrawRectangle(blockPen, rect);
 
-            Font drawFont = new Font("Arial", 15);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             StringFormat drawFormat = new StringFormat();
             e.Graphics.DrawString(blockText, drawFont, drawBrush, mathBlock.Location.X * 100 + 7, mathBlock.Location.Y * 100 + 15, drawFormat);

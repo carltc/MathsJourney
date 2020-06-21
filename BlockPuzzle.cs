@@ -18,6 +18,7 @@ namespace MathsJourney
         private int GridSize;
         private int PuzzleCount = 0;
         private int CurrentPuzzle = 0;
+        private List<int> UncompletedPuzzleIDs;
 
         public BlockPuzzle()
         {
@@ -44,7 +45,7 @@ namespace MathsJourney
             BlockPuzzleGrid.CalculateGrid(GridSize, PuzzleCount);
 
             // Setup new player
-            BlockPuzzlePlayer.Initiate(BlockPuzzleGrid.StartLocations, BlockPuzzleGrid.StartValues);
+            BlockPuzzlePlayer.Initiate(BlockPuzzleGrid.StartLocations, BlockPuzzleGrid.StartValues, BlockPuzzleGrid.Targets);
 
 
             PuzzleBox.Refresh();
@@ -57,16 +58,22 @@ namespace MathsJourney
             // clear current items
             listView1.Clear();
 
+            UncompletedPuzzleIDs = new List<int>();
+
             for (int p = 0; p < BlockPuzzleGrid.PuzzleCount; p++)
             {
-                var listString = $"Target: {BlockPuzzleGrid.Targets[p]}";
-                if (p == CurrentPuzzle)
+                if (BlockPuzzlePlayer.Values[p] != BlockPuzzlePlayer.Targets[p])
                 {
-                    listString = "ACTIVE " + listString;
+                    var listString = $"Target: {BlockPuzzleGrid.Targets[p]}";
+                    if (p == CurrentPuzzle)
+                    {
+                        listString = "ACTIVE " + listString;
+                    }
+                    var item = new ListViewItem(listString);
+                    item.ForeColor = BlockPuzzleGrid.Colours[p];
+                    listView1.Items.Add(item);
+                    UncompletedPuzzleIDs.Add(p);
                 }
-                var item = new ListViewItem(listString);
-                item.ForeColor = BlockPuzzleGrid.Colours[p];
-                listView1.Items.Add(item);
             }
         }
 
@@ -127,9 +134,10 @@ namespace MathsJourney
                     PuzzlesEnded[i] = true;
                 }
 
-                if (BlockPuzzlePlayer.Values[i] == BlockPuzzleGrid.Targets[i])
+                if (BlockPuzzlePlayer.Values[i] == BlockPuzzlePlayer.Targets[i])
                 {
                     PuzzlesEnded[i] = true;
+                    RefreshPuzzleList();
                 }
             }
 
@@ -201,7 +209,7 @@ namespace MathsJourney
                 GameLive = true;
 
                 // Setup new player
-                BlockPuzzlePlayer.Initiate(BlockPuzzleGrid.StartLocations, BlockPuzzleGrid.StartValues);
+                BlockPuzzlePlayer.Initiate(BlockPuzzleGrid.StartLocations, BlockPuzzleGrid.StartValues, BlockPuzzleGrid.Targets) ;
 
 
                 PuzzleBox.Refresh();
@@ -213,14 +221,22 @@ namespace MathsJourney
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Get the currently selected item in the ListBox.
-            CurrentPuzzle = listView1.SelectedItems[0].Index;
+            CurrentPuzzle = UncompletedPuzzleIDs[listView1.SelectedItems[0].Index];
 
             RefreshPuzzleList();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CurrentPuzzle++;
+            int index = UncompletedPuzzleIDs.FindIndex(i => i == CurrentPuzzle);
+            index++;
+
+            if (index >= UncompletedPuzzleIDs.Count())
+            {
+                index = 0;
+            }
+
+            CurrentPuzzle = UncompletedPuzzleIDs[index];
             if (CurrentPuzzle >= PuzzleCount)
             {
                 CurrentPuzzle = 0;
