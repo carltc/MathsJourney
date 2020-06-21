@@ -9,51 +9,51 @@ namespace MathsJourney
 {
     public static class BlockPuzzlePlayer
     {
-        public static BlockLocation Location { get; set; }
-        public static int Value { get; set; }
-        public static int Target { get; set; }
+        public static List<BlockLocation> Locations { get; set; }
+        public static List<int> Values { get; set; }
+        public static List<int> Targets { get; set; }
         public static int Level { get; set; }
 
-        public static void Initiate(BlockLocation location, int startValue)
+        public static void Initiate(List<BlockLocation> locations, List<int> startValues)
         {
             // Set player starting values
-            BlockPuzzlePlayer.Location = location;
+            BlockPuzzlePlayer.Locations = locations.Select(item => item.copy()).ToList();
             BlockPuzzlePlayer.Level = 1;
-            BlockPuzzlePlayer.Value = startValue;
+            BlockPuzzlePlayer.Values = startValues.Select(item => item).ToList();
         }
 
-        public static bool Move(int Xmove, int Ymove)
+        public static bool Move(int puzzleID, int Xmove, int Ymove)
         {
-            if (!AllowedMove(Xmove,Ymove))
+            if (!AllowedMove(puzzleID, Xmove, Ymove))
             {
                 return false;
             }
 
-            Location.X += Xmove;
-            Location.Y += Ymove;
+            Locations[puzzleID].X += Xmove;
+            Locations[puzzleID].Y += Ymove;
 
             // Calculate new value.
-            BlockPuzzlePlayer.DoMaths(BlockPuzzleGrid.Grid[Location.X, Location.Y]);
-            BlockPuzzleGrid.Grid[Location.X, Location.Y].Used = true;
+            BlockPuzzlePlayer.DoMaths(puzzleID, BlockPuzzleGrid.Grid[Locations[puzzleID].X, Locations[puzzleID].Y]);
+            BlockPuzzleGrid.Grid[Locations[puzzleID].X, Locations[puzzleID].Y].Used = true;
 
             return true;
         }
 
-        public static bool AllowedMove(int Xmove, int Ymove)
+        public static bool AllowedMove(int puzzleID, int Xmove, int Ymove)
         {
             // Check if move is within boundaries
-            if (Location.X + Xmove < 0 || Location.Y + Ymove < 0)
+            if (Locations[puzzleID].X + Xmove < 0 || Locations[puzzleID].Y + Ymove < 0)
             {
                 return false;
             }
-            if (Location.X + Xmove >= BlockPuzzleGrid.GridSize || Location.Y + Ymove >= BlockPuzzleGrid.GridSize)
+            if (Locations[puzzleID].X + Xmove >= BlockPuzzleGrid.GridSize || Locations[puzzleID].Y + Ymove >= BlockPuzzleGrid.GridSize)
             {
                 return false;
             }
 
             // Check if maths on block is allowed
-            BlockLocation newLocation = new BlockLocation(BlockPuzzlePlayer.Location.X + Xmove, BlockPuzzlePlayer.Location.Y + Ymove);
-            if (!MathsAllowed(newLocation))
+            BlockLocation newLocation = new BlockLocation(BlockPuzzlePlayer.Locations[puzzleID].X + Xmove, BlockPuzzlePlayer.Locations[puzzleID].Y + Ymove);
+            if (!MathsAllowed(puzzleID, newLocation))
             {
                 return false;
             }
@@ -67,32 +67,32 @@ namespace MathsJourney
             return true;
         }
 
-        public static void DoMaths(MathBlock mathBlock)
+        public static void DoMaths(int puzzleID, MathBlock mathBlock)
         {
             switch(mathBlock.Function)
             {
                 case MathFunction.Add:
-                    Value += mathBlock.Value;
+                    Values[puzzleID] += mathBlock.Value;
                     break;
                 case MathFunction.Subtract:
-                    Value -= mathBlock.Value;
+                    Values[puzzleID] -= mathBlock.Value;
                     break;
                 case MathFunction.Multiply:
-                    Value *= mathBlock.Value;
+                    Values[puzzleID] *= mathBlock.Value;
                     break;
                 case MathFunction.Divide:
-                    Value /= mathBlock.Value;
+                    Values[puzzleID] /= mathBlock.Value;
                     break;
             }
 
-            if (Value == Target)
-            {
-                BlockPuzzlePlayer.Level += 1;
-                BlockPuzzlePlayer.Target = new Random().Next(1, 100);
-            }
+            //if (Values[puzzleID] == Targets[puzzleID])
+            //{
+            //    BlockPuzzlePlayer.Level += 1;
+            //    BlockPuzzlePlayer.Targets[puzzleID] = new Random().Next(1, 100);
+            //}
         }
 
-        public static bool MathsAllowed(BlockLocation blockLocation)
+        public static bool MathsAllowed(int puzzleID, BlockLocation blockLocation)
         {
             // Get block at new location
             var newBlock = BlockPuzzleGrid.Grid[blockLocation.X, blockLocation.Y];
@@ -103,7 +103,7 @@ namespace MathsJourney
                 if (newBlock.Function == MathFunction.Divide)
                 {
                     // Check if division is allowed
-                    if (BlockPuzzlePlayer.Value % newBlock.Value != 0)
+                    if (BlockPuzzlePlayer.Values[puzzleID] % newBlock.Value != 0)
                     {
                         return false;
                     }

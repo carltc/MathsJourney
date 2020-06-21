@@ -7,107 +7,184 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace MathsJourney
 {
     public static class BlockPuzzleGrid
     {
         public static MathBlock[,] Grid;
-        public static int GridSize;
+        public static int GridSize { get; set; }
+        public static int PuzzleCount { get; set; }
         public static Random rand = new Random();
-        public static int Target { get; set; }
-        public static BlockLocation StartLocation { get; set; }
-        public static int StartValue { get; set; }
-        public static int RequiredMoves { get; set; }
+        private static List<int> CurrentValues = new List<int>();
+        private static List<BlockLocation> CurrentLocations = new List<BlockLocation>();
+        public static List<int> Targets = new List<int>();
+        public static List<BlockLocation> StartLocations = new List<BlockLocation>();
+        public static List<int> StartValues = new List<int>();
+        public static List<Color> Colours = new List<Color>();
+        public static List<int> RequiredMoves { get; set; }
 
 
-        // Store current grid and settings so game can be restarted
-        public static MathBlock[,] CurrentGrid;
-        public static int CurrentTarget { get; set; }
-        public static BlockLocation CurrentStartLocation { get; set; }
-        public static int CurrentStartValue { get; set; }
-        public static int CurrentRequiredMoves { get; set; }
-
-        public static void CalculateGrid(int size, int desiredMoves)
+        public static void CalculateGrid(int size, int puzzleCount)
         {
+            // Reset all lists
+            CurrentValues = new List<int>();
+            CurrentLocations = new List<BlockLocation>();
+            Targets = new List<int>();
+            StartLocations = new List<BlockLocation>();
+            StartValues = new List<int>();
+            Colours = new List<Color>();
+
             GridSize = size;
-
+            PuzzleCount = puzzleCount;
             Grid = new MathBlock[size, size];
+            int minTarget = 1;
+            int maxTarget = 20;
+            List<bool> PuzzlesComplete = new List<bool>();
 
-            //Choose target for puzzle
-            Target = rand.Next(1, 100);
-            int CurrentValue = Target;
-            int moves = 0;
+            // Initiate each puzzle
+            for (int p = 0; p < puzzleCount; p++)
+            {
+                //Choose target for puzzle
+                Targets.Add(rand.Next(minTarget, maxTarget));
+                CurrentValues.Add(Targets.Last());
 
-            //Choose Target location
-            int blockX = rand.Next(0, size);
-            int blockY = rand.Next(0, size);
+                //Choose Target location
+                int blockX = rand.Next(0, size);
+                int blockY = rand.Next(0, size);
+                while (CurrentLocations.FindIndex(a => a == new BlockLocation(blockX, blockY)) >= 0)
+                {
+                    blockX = rand.Next(0, size);
+                    blockY = rand.Next(0, size);
+                }
+                CurrentLocations.Add(new BlockLocation(blockX, blockY));
+                StartLocations.Add(new BlockLocation(0, 0));
+                StartValues.Add(0);
+
+                // Set puzzle colour
+                switch (p)
+                {
+                    case 0:
+                        Colours.Add(Color.Green);
+                        break;
+                    case 1:
+                        Colours.Add(Color.Blue);
+                        break;
+                    case 2:
+                        Colours.Add(Color.Orange);
+                        break;
+                    case 3:
+                        Colours.Add(Color.Purple);
+                        break;
+                    case 4:
+                        Colours.Add(Color.Black);
+                        break;
+                    case 5:
+                        Colours.Add(Color.Coral);
+                        break;
+                    case 6:
+                        Colours.Add(Color.Aquamarine);
+                        break;
+                    case 7:
+                        Colours.Add(Color.Magenta);
+                        break;
+                    case 8:
+                        Colours.Add(Color.Lime);
+                        break;
+                    case 9:
+                        Colours.Add(Color.Pink);
+                        break;
+                    default:
+                        Colours.Add(Color.Cyan);
+                        break;
+                }
+
+                PuzzlesComplete.Add(false);
+            }
+
+            // Check if any starting locations are the same
+            if (CurrentLocations.Count() != CurrentLocations.Distinct().Count())
+            {
+                return;
+            }
+
 
             // Calculate each move and create block
-            for (int i = 0; i < desiredMoves; i++)
+            //for (int i = 0; i < desiredMoves; i++)
+            while(PuzzlesComplete.Contains(false))
             {
-                // Create a random block
-                Grid[blockX, blockY] = GetRandomMathBlocks(rand, new BlockLocation(blockX, blockY));
+                // loop through for each puzzle
+                for (int i = 0; i < PuzzleCount; i++)
+                {
+                    // Check if puzzle has already been completed.
+                    if (!PuzzlesComplete[i])
+                    {
+                        // Create a random block
+                        Grid[CurrentLocations[i].X, CurrentLocations[i].Y] = GetRandomMathBlocks(rand, new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y));
 
-                // Check if block is allowed and if not create a new one
-                while (!BlockAllowed(CurrentValue, Grid[blockX, blockY]))
-                {
-                    Grid[blockX, blockY] = GetRandomMathBlocks(rand, new BlockLocation(blockX, blockY));
-                }
+                        // Check if block is allowed and if not create a new one
+                        while (!BlockAllowed(CurrentValues[i], Grid[CurrentLocations[i].X, CurrentLocations[i].Y]))
+                        {
+                            Grid[CurrentLocations[i].X, CurrentLocations[i].Y] = GetRandomMathBlocks(rand, new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y));
+                        }
 
-                // Calculate new value of next location
-                CurrentValue = CalculateReverseBlock(CurrentValue, Grid[blockX, blockY]);
-                moves++;
+                        // Calculate all available direction
+                        List<BlockLocation> availableLocations = new List<BlockLocation>();
 
-                // Calculate all available direction
-                List<BlockLocation> availableLocations = new List<BlockLocation>();
+                        //Check up
+                        if (MoveAllowed(new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y - 1)))
+                        {
+                            availableLocations.Add(new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y - 1));
+                        }
+                        //Check down
+                        if (MoveAllowed(new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y + 1)))
+                        {
+                            availableLocations.Add(new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y + 1));
+                        }
+                        //Check left
+                        if (MoveAllowed(new BlockLocation(CurrentLocations[i].X - 1, CurrentLocations[i].Y)))
+                        {
+                            availableLocations.Add(new BlockLocation(CurrentLocations[i].X - 1, CurrentLocations[i].Y));
+                        }
+                        //Check down
+                        if (MoveAllowed(new BlockLocation(CurrentLocations[i].X + 1, CurrentLocations[i].Y)))
+                        {
+                            availableLocations.Add(new BlockLocation(CurrentLocations[i].X + 1, CurrentLocations[i].Y));
+                        }
 
-                //Check up
-                if (blockY - 1 >= 0 && Grid[blockX, blockY - 1] == null)
-                {
-                    availableLocations.Add(new BlockLocation(blockX, blockY - 1));
-                }
-                //Check down
-                if (blockY + 1 < size && Grid[blockX, blockY + 1] == null)
-                {
-                    availableLocations.Add(new BlockLocation(blockX, blockY + 1));
-                }
-                //Check left
-                if (blockX - 1 >= 0 && Grid[blockX - 1, blockY] == null)
-                {
-                    availableLocations.Add(new BlockLocation(blockX - 1, blockY));
-                }
-                //Check down
-                if (blockX + 1 < size && Grid[blockX + 1, blockY] == null)
-                {
-                    availableLocations.Add(new BlockLocation(blockX + 1, blockY));
-                }
+                        if (availableLocations.Count() > 0)
+                        {
+                            // Calculate new value of next location
+                            CurrentValues[i] = CalculateReverseBlock(CurrentValues[i], Grid[CurrentLocations[i].X, CurrentLocations[i].Y]);
 
-                if (availableLocations.Count() > 0)
-                {
-                    // Choose random next direction
-                    var nextLocation = availableLocations[rand.Next(0, availableLocations.Count())];
-                    blockX = nextLocation.X;
-                    blockY = nextLocation.Y;
-                }
-                else
-                {
-                    Grid[blockX, blockY] = new MathBlock(0, MathFunction.Add, new BlockLocation(blockX, blockY));
-                    break;
+                            // Choose random next direction
+                            var nextLocation = availableLocations[rand.Next(0, availableLocations.Count())];
+                            CurrentLocations[i].X = nextLocation.X;
+                            CurrentLocations[i].Y = nextLocation.Y;
+
+                        }
+                        else
+                        {
+                            // End puzzle creation
+                            Grid[CurrentLocations[i].X, CurrentLocations[i].Y] = new MathBlock(0, MathFunction.Add, new BlockLocation(CurrentLocations[i].X, CurrentLocations[i].Y));
+                            PuzzlesComplete[i] = true;
+
+                            // Set starting conditions
+                            StartLocations[i] = new BlockLocation(CurrentLocations[i]);
+                            StartValues[i] = CurrentValues[i];
+
+                            // Set start location as used to prevent it happening
+                            Grid[CurrentLocations[i].X, CurrentLocations[i].Y].Used = true;
+                        }
+                    }
                 }
             }
 
-            // Set starting criteria
-            StartLocation = new BlockLocation(blockX, blockY);
-            StartValue = CurrentValue;
-            RequiredMoves = moves;
-
-            Console.WriteLine($"Start location: X:{blockX} Y:{blockY}");
-
             // Populate remaining blocks
-            for (int i = 0; i <= GridSize-1; i++)
+            for (int i = 0; i <= GridSize - 1; i++)
             {
-                for (int j = 0; j <= GridSize-1; j++)
+                for (int j = 0; j <= GridSize - 1; j++)
                 {
                     if (Grid[i, j] == null)
                     {
@@ -115,33 +192,51 @@ namespace MathsJourney
                     }
                 }
             }
+        }
 
-            // Set start location as used to prevent it happening
-            Grid[blockX, blockY].Used = true;
+        public static bool MoveAllowed(BlockLocation newLocation)
+        {
+            // Check it is inside grid
+            if (newLocation.X < 0 || newLocation.X >= GridSize || newLocation.Y < 0 || newLocation.Y >= GridSize)
+            {
+                return false;
+            }
 
+            // Check grid is currently not occupied by mathblock
+            if (Grid[newLocation.X, newLocation.Y] != null)
+            {
+                return false;
+            }
 
-            // Set current variables so game can be restarted
-            CurrentStartLocation = new BlockLocation(StartLocation.X,StartLocation.Y);
+            // Check it is not location of another puzzle
+            foreach (var currentLocation in CurrentLocations)
+            {
+                if (newLocation == currentLocation)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
         }
 
         public static bool ResetGrid()
         {
-            if (CurrentStartLocation != null)
+            // Reset used status in Grid
+            foreach (var block in Grid)
             {
-                StartLocation = new BlockLocation(CurrentStartLocation.X, CurrentStartLocation.Y);
-
-                // Reset used status in Grid
-                foreach (var block in Grid)
+                if (StartLocations.FindIndex(bl => bl == block.Location) >= 0)
                 {
-                    if (block.Location != StartLocation)
-                    {
-                        Grid[block.Location.X, block.Location.Y].Used = false;
-                    }
+                    Grid[block.Location.X, block.Location.Y].Used = true;
                 }
-
-                return true;
+                else
+                {
+                    Grid[block.Location.X, block.Location.Y].Used = false;
+                }
             }
-            return false;
+
+            return true;
         }
 
         public static bool BlockAllowed(int value, MathBlock block)
@@ -150,7 +245,13 @@ namespace MathsJourney
             switch(block.Function)
             {
                 case MathFunction.Multiply:
-                    if (value%block.Value != 0)
+                    if (value%block.Value != 0 || block.Value <= 1)
+                    {
+                        return false;
+                    }
+                    break;
+                case MathFunction.Divide:
+                    if (block.Value <= 1)
                     {
                         return false;
                     }
@@ -238,12 +339,15 @@ namespace MathsJourney
             Pen blockPen;
             SolidBrush blockBrush = null;
             string blockText = "";
-            if (mathBlock.Location == BlockPuzzlePlayer.Location)
+            if (BlockPuzzlePlayer.Locations.FindIndex(a => a == mathBlock.Location) >= 0)
             {
-                // Create pen.
-                blockPen = new Pen(Color.Green, 8);
+                // get player index
+                int playerID = BlockPuzzlePlayer.Locations.FindIndex(i => i == mathBlock.Location);
 
-                blockText = BlockPuzzlePlayer.Value.ToString();
+                // Create pen.
+                blockPen = new Pen(Colours[playerID], 8);
+
+                blockText = BlockPuzzlePlayer.Values[playerID].ToString();
             }
             else
             {
@@ -273,10 +377,10 @@ namespace MathsJourney
                             break;
                         case MathFunction.Divide:
                             functionString = "÷";
-                            if (BlockPuzzlePlayer.Value%mathBlock.Value != 0)
-                            {
-                                blockBrush = new SolidBrush(Color.Red);
-                            }
+                            //if (BlockPuzzlePlayer.Value%mathBlock.Value != 0)
+                            //{
+                            //    blockBrush = new SolidBrush(Color.Red);
+                            //}
                             break;
                     }
                     blockText = functionString + " " + valueString;

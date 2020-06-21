@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +41,12 @@ namespace MathsJourney
         {
             X = x;
             Y = y;
+        }
+
+        public BlockLocation(BlockLocation blockLocation)
+        {
+            X = blockLocation.X;
+            Y = blockLocation.Y;
         }
 
         public bool Equals(BlockLocation otherLocation)
@@ -88,6 +95,12 @@ namespace MathsJourney
         public static bool operator !=(BlockLocation lhs, BlockLocation rhs)
         {
             return !(lhs == rhs);
+        }
+
+        public BlockLocation copy()
+        {
+            var blockLocation = new BlockLocation(this.X, this.Y);
+            return blockLocation;
         }
     }
 }
