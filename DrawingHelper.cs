@@ -10,9 +10,9 @@ namespace MathsJourney
 {
     public static class DrawingHelper
     {
-        public static void DrawRectangle(PaintEventArgs e, Point rectangleTopLeft, int rectangleWidth, int rectangleHeight, Color borderColor, bool fill, Color fillColor)
+        public static void DrawRectangle(PaintEventArgs e, Point rectangleTopLeft, int rectangleWidth, int rectangleHeight, Color borderColor, bool fill, Color fillColor, float borderWidth = 1)
         {
-            Pen rectanglePen = new Pen(borderColor);
+            Pen rectanglePen = new Pen(borderColor, borderWidth);
             SolidBrush rectangleBrush = new SolidBrush(fillColor);
             
             Rectangle rect = new Rectangle(rectangleTopLeft.X, rectangleTopLeft.Y, rectangleWidth, rectangleHeight);

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using static MathsJourney.DrawingHelper;
 
@@ -14,14 +9,14 @@ namespace MathsJourney.ColourCombine
         private ColourGrid _parentGrid { get; set; }
         public ColourType ColourType { get; set; }
 
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int I { get; set; }
+        public int J { get; set; }
         public int Count { get; set; }
 
-        public Point BlockLocation { get => new Point(X * BlockWidth, Y * BlockHeight); }
+        public Point BlockLocation { get => new Point(I * BlockWidth, J * BlockHeight); }
 
-        public int BlockWidth { get => _parentGrid.GameFieldSize.Width / ColourGrid.GridSize; }
-        public int BlockHeight { get => _parentGrid.GameFieldSize.Height / ColourGrid.GridSize; }
+        public int BlockWidth { get => _parentGrid.BlockWidth; }
+        public int BlockHeight { get => _parentGrid.BlockHeight; }
 
         public bool ShouldFill { get => ColourType != ColourType.Blank; }
         public Color FillColour
@@ -50,8 +45,8 @@ namespace MathsJourney.ColourCombine
         {
             _parentGrid = parentGrid;
             ColourType = colourType;
-            X = x;
-            Y = y;
+            I = x;
+            J = y;
         }
 
         public void DrawBlock(PaintEventArgs e)

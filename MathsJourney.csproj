@@ -52,6 +52,7 @@
     <Compile Include="BlockHunt\BlockHunt.Designer.cs">
       <DependentUpon>BlockHunt.cs</DependentUpon>
     </Compile>
+    <Compile Include="ColourCombine\BlockMove.cs" />
     <Compile Include="BlockPuzzle\BlockPuzzlePlayer.cs" />
     <Compile Include="BlockPuzzle\BlockPuzzleGrid.cs" />
     <Compile Include="BlockPuzzle\BlockPuzzle.cs">
