@@ -129,6 +129,9 @@ namespace MathsJourney.ColourCombine
                     var destroyedBlock = new ColourBlock(this, ColourType.Blank, newPoint.X, newPoint.Y);
                     destroyedBlock.ColourResidue = colourBlock.ColourType;
                     ColourBlocks[newPoint.X, newPoint.Y] = destroyedBlock;
+
+                    // Remove 1 from score
+                    Game.Score -= 1;
                 }
                 else
                 {
@@ -138,6 +141,8 @@ namespace MathsJourney.ColourCombine
                     colourBlock.I = newPoint.X;
                     colourBlock.J = newPoint.Y;
 
+                    // Add 1 to score
+                    Game.Score += 1;
                 }
                 // Set the old location as blank
                 var newBlock = new ColourBlock(this, ColourType.Blank, oldPoint.X, oldPoint.Y);

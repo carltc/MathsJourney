@@ -14,6 +14,8 @@ namespace MathsJourney.ColourCombine
     {
         public ColourGrid ColourGrid { get; set; }
 
+        public int Score { get; set; } = 0;
+
         public ColourCombine()
         {
             InitializeComponent();
@@ -23,7 +25,11 @@ namespace MathsJourney.ColourCombine
 
         private void GameField_Paint(object sender, PaintEventArgs e)
         {
+            // Redraw the game field
             DrawGrid(e);
+
+            // Update the score label
+            ScoreLabel.Text = $"Score: {Score}";
         }
 
         public void DrawGrid(PaintEventArgs e)
