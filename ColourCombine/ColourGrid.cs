@@ -110,7 +110,6 @@ namespace MathsJourney.ColourCombine
 
             if (ValidMove(colourBlock, newPoint))
             {
-
                 var overwrittenColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
 
                 // Check if this was a move of the same colour overwriting, and if so then increment the count of this block
@@ -154,6 +153,12 @@ namespace MathsJourney.ColourCombine
 
         public bool ValidMove(ColourBlock colourBlock, Point newPoint)
         {
+            // Check if colourblock is a blank
+            if (colourBlock.ColourType == ColourType.Blank)
+            {
+                return false;
+            }
+
             // Check if the new point is within the level boundary
             if (
                     newPoint.Y < LevelMin.Y ||
