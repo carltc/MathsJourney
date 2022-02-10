@@ -118,15 +118,31 @@ namespace MathsJourney.ColourCombine
                 {
                     colourBlock.Count += overwrittenColourBlock.Count;
                 }
+                else
+                {
+                    colourBlock.Count--;
+                }
 
-                // Set the new location with the colour block
-                ColourBlocks[newPoint.X, newPoint.Y] = colourBlock;
-                // Set the location of the new point
-                colourBlock.I = newPoint.X;
-                colourBlock.J = newPoint.Y;
+                // Check the block count. If it is less than 1 then destroy it (but leave residue)
+                if (colourBlock.Count < 1)
+                {
+                    var destroyedBlock = new ColourBlock(this, ColourType.Blank, newPoint.X, newPoint.Y);
+                    destroyedBlock.ColourResidue = colourBlock.ColourType;
+                    ColourBlocks[newPoint.X, newPoint.Y] = destroyedBlock;
+                }
+                else
+                {
+                    // Set the new location with the colour block
+                    ColourBlocks[newPoint.X, newPoint.Y] = colourBlock;
+                    // Set the location of the new point
+                    colourBlock.I = newPoint.X;
+                    colourBlock.J = newPoint.Y;
 
+                }
                 // Set the old location as blank
-                ColourBlocks[oldPoint.X, oldPoint.Y] = new ColourBlock(this, ColourType.Blank, oldPoint.X, oldPoint.Y);
+                var newBlock = new ColourBlock(this, ColourType.Blank, oldPoint.X, oldPoint.Y);
+                newBlock.ColourResidue = colourBlock.ColourType;
+                ColourBlocks[oldPoint.X, oldPoint.Y] = newBlock;
 
             }
         }
