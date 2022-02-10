@@ -260,7 +260,7 @@ namespace MathsJourney
             }
 
             // Check if next value will be over 150
-            if (CalculateReverseBlock(value, block) > 150)
+            if (CalculateReverseBlock(value, block) > 50 || CalculateReverseBlock(value, block) < -50)
             {
                 return false;
             }
@@ -320,8 +320,11 @@ namespace MathsJourney
             return mathBlock;
         }
 
-        public static void DrawGrid(PaintEventArgs e)
+        public static void DrawGrid(PaintEventArgs e, int gridPixelWidth, int blockSpacing)
         {
+            // Calculate grid data
+            int blockSize = gridPixelWidth / GridSize;
+
             for (int i = 0; i <= Grid.GetLength(0) - 1; i++)
             {
                 for (int j = 0; j <= Grid.GetLength(1) - 1; j++)
@@ -337,12 +340,12 @@ namespace MathsJourney
                     //}
 
                     var mathBlock = Grid[i, j];
-                    DrawBlock(e, mathBlock);
+                    DrawBlock(e, mathBlock, blockSize, blockSpacing);
                 }
             }
         }
 
-        public static void DrawBlock(PaintEventArgs e, MathBlock mathBlock)
+        public static void DrawBlock(PaintEventArgs e, MathBlock mathBlock, int blockSize, int blockSpacing)
         {
             Pen blockPen;
             SolidBrush blockBrush = null;
@@ -406,25 +409,35 @@ namespace MathsJourney
                 blockText = functionString + " " + valueString;
             }
 
-            // Create rectangle.
-            int SizeX = 50;
-            int SizeY = SizeX;
-            Rectangle rect = new Rectangle(mathBlock.Location.X*100, mathBlock.Location.Y*100, SizeX, SizeY);
 
+            // Calculate block location
+            int blockLocXpix = (mathBlock.Location.X * blockSize); // + (blockSize / 2);
+            int blockLocYpix = (mathBlock.Location.Y * blockSize); // + (blockSize / 2);
+
+            // Calculate block size
+            int blockXpix = blockSize - (blockSpacing * 2);
+            int blockYpix = blockXpix;
+
+            // Draw rectangle to screen.
+            // Create rectangle.
+            Rectangle rect = new Rectangle(blockLocXpix, blockLocYpix, blockXpix, blockYpix);
             // Fill rectangle
             if (blockBrush != null)
             {
                 e.Graphics.FillRectangle(blockBrush, rect);
             }
-
-            // Draw rectangle to screen.
+            // Draw border
             e.Graphics.DrawRectangle(blockPen, rect);
 
-            e.Graphics.DrawRectangle(blockPen, rect);
-
+            // Calculate text location
+            int textLocXpix = (mathBlock.Location.X * blockSize) + (blockSize / 2);
+            int textLocYpix = (mathBlock.Location.Y * blockSize) + (blockSize / 2);
+            // Draw font
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             StringFormat drawFormat = new StringFormat();
-            e.Graphics.DrawString(blockText, drawFont, drawBrush, mathBlock.Location.X * 100 + 7, mathBlock.Location.Y * 100 + 15, drawFormat);
+            drawFormat.LineAlignment = StringAlignment.Center;
+            drawFormat.Alignment = StringAlignment.Center;
+            e.Graphics.DrawString(blockText, drawFont, drawBrush, textLocXpix, textLocYpix, drawFormat);
         }
     }
 }

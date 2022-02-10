@@ -41,7 +41,7 @@ namespace MathsJourney
             GameLive = true;
 
             GridSize = 5;
-            PuzzleCount = 6;
+            PuzzleCount = 4;
             BlockPuzzleGrid.CalculateGrid(GridSize, PuzzleCount);
 
             // Setup new player
@@ -79,7 +79,7 @@ namespace MathsJourney
 
         private void PuzzleBox_Paint(object sender, PaintEventArgs e)
         {
-            BlockPuzzleGrid.DrawGrid(e);
+            BlockPuzzleGrid.DrawGrid(e, PuzzleBox.Width, 10);
         }
 
         private void NewGameButton_Click(object sender, EventArgs e)

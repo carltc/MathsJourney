@@ -60,14 +60,14 @@ namespace MathsJourney
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Only accept input if start of game, or game is live
-            if (!FirstMove || Program.GameLive)
+            if (!FirstMove || MainMenu.GameLive)
             {
                 // On first move start countdown timer
                 if (!FirstMove)
                 {
                     FirstMove = true;
-                    Program.GameLive = true;
-                    Program.RefreshThread.Start();
+                    MainMenu.GameLive = true;
+                    MainMenu.RefreshThread.Start();
                 }
 
                 switch (e.KeyChar)

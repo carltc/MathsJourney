@@ -41,7 +41,7 @@
             // 
             this.PuzzleBox.Location = new System.Drawing.Point(12, 12);
             this.PuzzleBox.Name = "PuzzleBox";
-            this.PuzzleBox.Size = new System.Drawing.Size(500, 500);
+            this.PuzzleBox.Size = new System.Drawing.Size(800, 800);
             this.PuzzleBox.TabIndex = 0;
             this.PuzzleBox.TabStop = false;
             this.PuzzleBox.Paint += new System.Windows.Forms.PaintEventHandler(this.PuzzleBox_Paint);
@@ -49,7 +49,7 @@
             // NewGameButton
             // 
             this.NewGameButton.Enabled = false;
-            this.NewGameButton.Location = new System.Drawing.Point(780, 374);
+            this.NewGameButton.Location = new System.Drawing.Point(1059, 374);
             this.NewGameButton.Name = "NewGameButton";
             this.NewGameButton.Size = new System.Drawing.Size(146, 40);
             this.NewGameButton.TabIndex = 5;
@@ -62,7 +62,7 @@
             this.GameResultLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.GameResultLabel.AutoSize = true;
             this.GameResultLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GameResultLabel.Location = new System.Drawing.Point(692, 253);
+            this.GameResultLabel.Location = new System.Drawing.Point(910, 257);
             this.GameResultLabel.Name = "GameResultLabel";
             this.GameResultLabel.Size = new System.Drawing.Size(224, 46);
             this.GameResultLabel.TabIndex = 8;
@@ -71,7 +71,7 @@
             // 
             // ResetButton
             // 
-            this.ResetButton.Location = new System.Drawing.Point(556, 372);
+            this.ResetButton.Location = new System.Drawing.Point(835, 372);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(146, 40);
             this.ResetButton.TabIndex = 9;
@@ -82,7 +82,7 @@
             // listView1
             // 
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(556, 12);
+            this.listView1.Location = new System.Drawing.Point(835, 12);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(370, 147);
@@ -93,7 +93,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(556, 165);
+            this.button1.Location = new System.Drawing.Point(835, 165);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(370, 29);
             this.button1.TabIndex = 11;
@@ -105,7 +105,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(938, 537);
+            this.ClientSize = new System.Drawing.Size(1217, 829);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.ResetButton);
