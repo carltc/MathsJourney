@@ -11,9 +11,27 @@ namespace MathsJourney.ColourCombine
 
         public int I { get; set; }
         public int J { get; set; }
-        public int Count { get; set; }
+
+        private int _count = 1;
+        public int Count
+        {
+            get
+            {
+                if (ColourType == ColourType.Blank)
+                {
+                    return 0;
+                }
+                return _count;
+            }
+            set => _count = value;
+        }
 
         public Point BlockLocation { get => new Point(I * BlockWidth, J * BlockHeight); }
+
+        public Point BlockCentre
+        {
+            get => new Point(BlockLocation.X + BlockWidth / 2, BlockLocation.Y + BlockHeight / 2);
+        }
 
         public int BlockWidth { get => _parentGrid.BlockWidth; }
         public int BlockHeight { get => _parentGrid.BlockHeight; }
@@ -51,7 +69,14 @@ namespace MathsJourney.ColourCombine
 
         public void DrawBlock(PaintEventArgs e)
         {
+            // Draw the block
             DrawRectangle(e, BlockLocation, BlockWidth, BlockHeight, BorderColour, ShouldFill, FillColour);
+
+            // Draw the count text if it is greater than 1
+            if (Count > 1)
+            {
+                DrawText(e, Count.ToString(), BlockCentre);
+            }
         }
     }
 }

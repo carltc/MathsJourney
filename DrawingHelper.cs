@@ -28,5 +28,15 @@ namespace MathsJourney
 
             e.Graphics.DrawRectangle(rectanglePen, rect);
         }
+
+        public static void DrawText(PaintEventArgs e, string text, Point location)
+        {
+            Font drawFont = new Font("Arial", 15);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            StringFormat drawFormat = new StringFormat();
+            drawFormat.Alignment = StringAlignment.Center;
+            drawFormat.LineAlignment = StringAlignment.Center;
+            e.Graphics.DrawString(text, drawFont, drawBrush, location.X, location.Y, drawFormat);
+        }
     }
 }

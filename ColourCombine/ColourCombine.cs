@@ -71,7 +71,7 @@ namespace MathsJourney.ColourCombine
         private void IncreaseLevelButton_Click(object sender, EventArgs e)
         {
             // Increase the grid level
-            ColourGrid.Level++;
+            ColourGrid.IncreaseLevel();
             IncreaseLevelButton.Text = $"Current Level: {ColourGrid.Level} - Increase Level";
             GameField.Refresh();
         }

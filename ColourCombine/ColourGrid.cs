@@ -88,29 +88,44 @@ namespace MathsJourney.ColourCombine
         {
             if (ValidMove(colourBlock, blockMove))
             {
+                Point oldPoint = new Point(colourBlock.I, colourBlock.J);
+                Point newPoint;
                 switch (blockMove)
                 {
                     case BlockMove.Up:
-                        ColourBlocks[colourBlock.I, colourBlock.J - 1] = colourBlock;
-                        ColourBlocks[colourBlock.I, colourBlock.J] = new ColourBlock(this, ColourType.Blank, colourBlock.I, colourBlock.J);
-                        colourBlock.J -= 1;
+                        newPoint = new Point(oldPoint.X, oldPoint.Y - 1);
                         break;
                     case BlockMove.Down:
-                        ColourBlocks[colourBlock.I, colourBlock.J + 1] = colourBlock;
-                        ColourBlocks[colourBlock.I, colourBlock.J] = new ColourBlock(this, ColourType.Blank, colourBlock.I, colourBlock.J);
-                        colourBlock.J += 1;
+                        newPoint = new Point(oldPoint.X, oldPoint.Y + 1);
                         break;
                     case BlockMove.Left:
-                        ColourBlocks[colourBlock.I - 1, colourBlock.J] = colourBlock;
-                        ColourBlocks[colourBlock.I, colourBlock.J] = new ColourBlock(this, ColourType.Blank, colourBlock.I, colourBlock.J);
-                        colourBlock.I -= 1;
+                        newPoint = new Point(oldPoint.X - 1, oldPoint.Y);
                         break;
                     case BlockMove.Right:
-                        ColourBlocks[colourBlock.I + 1, colourBlock.J] = colourBlock;
-                        ColourBlocks[colourBlock.I, colourBlock.J] = new ColourBlock(this, ColourType.Blank, colourBlock.I, colourBlock.J);
-                        colourBlock.I += 1;
+                        newPoint = new Point(oldPoint.X + 1, oldPoint.Y);
                         break;
+                    default:
+                        // A new blockmove which has not been implented so therefore return
+                        return;
                 }
+
+                var overwrittenColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
+
+                // Check if this was a move of the same colour overwriting, and if so then increment the count of this block
+                if (overwrittenColourBlock.ColourType == colourBlock.ColourType)
+                {
+                    colourBlock.Count += overwrittenColourBlock.Count;
+                }
+
+                // Set the new location with the colour block
+                ColourBlocks[newPoint.X, newPoint.Y] = colourBlock;
+                // Set the location of the new point
+                colourBlock.I = newPoint.X;
+                colourBlock.J = newPoint.Y;
+
+                // Set the old location as blank
+                ColourBlocks[oldPoint.X, oldPoint.Y] = new ColourBlock(this, ColourType.Blank, oldPoint.X, oldPoint.Y);
+
             }
         }
 
@@ -122,7 +137,7 @@ namespace MathsJourney.ColourCombine
                     if (
                         colourBlock.J > 0 &&
                         colourBlock.J - 1 >= LevelMin.Y &&
-                        ColourBlocks[colourBlock.I, colourBlock.J - 1].ColourType == ColourType.Blank
+                        (ColourBlocks[colourBlock.I, colourBlock.J - 1].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I, colourBlock.J - 1].ColourType == colourBlock.ColourType)
                         )
                     {
                         return true;
@@ -132,7 +147,7 @@ namespace MathsJourney.ColourCombine
                     if (
                         colourBlock.J < GridSize - 1 &&
                         colourBlock.J + 1 <= LevelMax.Y &&
-                        ColourBlocks[colourBlock.I, colourBlock.J + 1].ColourType == ColourType.Blank
+                        (ColourBlocks[colourBlock.I, colourBlock.J + 1].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I, colourBlock.J + 1].ColourType == colourBlock.ColourType)
                         )
                     {
                         return true;
@@ -142,7 +157,7 @@ namespace MathsJourney.ColourCombine
                     if (
                         colourBlock.I > 0 &&
                         colourBlock.I - 1 >= LevelMin.X &&
-                        ColourBlocks[colourBlock.I - 1, colourBlock.J].ColourType == ColourType.Blank
+                        (ColourBlocks[colourBlock.I - 1, colourBlock.J].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I - 1, colourBlock.J].ColourType == colourBlock.ColourType)
                         )
                     {
                         return true;
@@ -152,7 +167,7 @@ namespace MathsJourney.ColourCombine
                     if (
                         colourBlock.I < GridSize - 1 &&
                         colourBlock.I + 1 <= LevelMax.X &&
-                        ColourBlocks[colourBlock.I + 1, colourBlock.J].ColourType == ColourType.Blank
+                        (ColourBlocks[colourBlock.I + 1, colourBlock.J].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I + 1, colourBlock.J].ColourType == colourBlock.ColourType)
                         )
                     {
                         return true;
@@ -169,6 +184,26 @@ namespace MathsJourney.ColourCombine
             var colourBlock = ColourBlocks[gridCentre, gridCentre];
 
             DrawRectangle(e, colourBlock.BlockLocation, BlockWidth * Level * 2, BlockHeight * Level * 2, Color.Red, fill: false, Color.Transparent, borderWidth: 3);
+        }
+
+        public void IncreaseLevel()
+        {
+            Level++;
+
+            Random rand = new Random();
+            // Populate the new level blank blocks with colour blocks
+            for (int i = LevelMin.X; i <= LevelMax.X; i++)
+            {
+                for (int j = LevelMin.Y; j <= LevelMax.Y; j++)
+                {
+                    if (i == LevelMin.X || i == LevelMax.X || j == LevelMin.Y || j == LevelMax.Y)
+                    {
+                        int rand_num = rand.Next(Enum.GetNames(typeof(ColourType)).Length - 1);
+
+                        ColourBlocks[i, j] = new ColourBlock(this, (ColourType)rand_num, i, j);
+                    }
+                }
+            }
         }
     }
 }
