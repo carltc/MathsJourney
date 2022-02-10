@@ -38,6 +38,16 @@ namespace MathsJourney.ColourCombine
             }
         }
 
+        public Point LevelMin
+        {
+            get => new Point((GridSize / 2 - 1) - (Level - 1), (GridSize / 2 - 1) - (Level - 1));
+        }
+
+        public Point LevelMax
+        {
+            get => new Point((GridSize / 2) + (Level - 1), (GridSize / 2) + (Level - 1));
+        }
+
         public ColourGrid(ColourCombine game, Size gameFieldSize)
         {
             Game = game;
@@ -111,6 +121,7 @@ namespace MathsJourney.ColourCombine
                 case BlockMove.Up:
                     if (
                         colourBlock.J > 0 &&
+                        colourBlock.J - 1 >= LevelMin.Y &&
                         ColourBlocks[colourBlock.I, colourBlock.J - 1].ColourType == ColourType.Blank
                         )
                     {
@@ -120,6 +131,7 @@ namespace MathsJourney.ColourCombine
                 case BlockMove.Down:
                     if (
                         colourBlock.J < GridSize - 1 &&
+                        colourBlock.J + 1 <= LevelMax.Y &&
                         ColourBlocks[colourBlock.I, colourBlock.J + 1].ColourType == ColourType.Blank
                         )
                     {
@@ -129,6 +141,7 @@ namespace MathsJourney.ColourCombine
                 case BlockMove.Left:
                     if (
                         colourBlock.I > 0 &&
+                        colourBlock.I - 1 >= LevelMin.X &&
                         ColourBlocks[colourBlock.I - 1, colourBlock.J].ColourType == ColourType.Blank
                         )
                     {
@@ -138,6 +151,7 @@ namespace MathsJourney.ColourCombine
                 case BlockMove.Right:
                     if (
                         colourBlock.I < GridSize - 1 &&
+                        colourBlock.I + 1 <= LevelMax.X &&
                         ColourBlocks[colourBlock.I + 1, colourBlock.J].ColourType == ColourType.Blank
                         )
                     {
