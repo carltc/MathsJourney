@@ -74,6 +74,7 @@ namespace MathsJourney
             this.PlayColourCombineButton.TabIndex = 2;
             this.PlayColourCombineButton.Text = "Play Colour Combine";
             this.PlayColourCombineButton.UseVisualStyleBackColor = true;
+            this.PlayColourCombineButton.Click += new System.EventHandler(this.PlayColourCombineButton_Click);
             // 
             // MainMenu
             // 

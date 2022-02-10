@@ -108,5 +108,17 @@ namespace MathsJourney
 
             BlockPuzzleGameWindow.Show();
         }
+
+        private void PlayColourCombineButton_Click(object sender, EventArgs e)
+        {
+            ////////////////////////////
+            ///  COLOUR COMBINE GAME ///
+            ////////////////////////////
+
+            // Create new form window
+            var colourCombineGame = new ColourCombine.ColourCombine();
+
+            colourCombineGame.Show();
+        }
     }
 }

@@ -46,20 +46,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockHunt.cs">
+    <Compile Include="BlockHunt\BlockHunt.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BlockHunt.Designer.cs">
+    <Compile Include="BlockHunt\BlockHunt.Designer.cs">
       <DependentUpon>BlockHunt.cs</DependentUpon>
     </Compile>
-    <Compile Include="BlockPuzzlePlayer.cs" />
-    <Compile Include="BlockPuzzleGrid.cs" />
-    <Compile Include="BlockPuzzle.cs">
+    <Compile Include="BlockPuzzle\BlockPuzzlePlayer.cs" />
+    <Compile Include="BlockPuzzle\BlockPuzzleGrid.cs" />
+    <Compile Include="BlockPuzzle\BlockPuzzle.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BlockPuzzle.Designer.cs">
+    <Compile Include="BlockPuzzle\BlockPuzzle.Designer.cs">
       <DependentUpon>BlockPuzzle.cs</DependentUpon>
     </Compile>
+    <Compile Include="ColourCombine\ColourBlock.cs" />
+    <Compile Include="ColourCombine\ColourCombine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ColourCombine\ColourCombine.Designer.cs">
+      <DependentUpon>ColourCombine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColourCombine\ColourGrid.cs" />
+    <Compile Include="ColourCombine\ColourType.cs" />
+    <Compile Include="DrawingHelper.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,15 +77,18 @@
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="MathBlock.cs" />
-    <Compile Include="BlockHuntGrid.cs" />
-    <Compile Include="BlockHuntPlayer.cs" />
+    <Compile Include="BlockHunt\BlockHuntGrid.cs" />
+    <Compile Include="BlockHunt\BlockHuntPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="BlockHunt.resx">
+    <EmbeddedResource Include="BlockHunt\BlockHunt.resx">
       <DependentUpon>BlockHunt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BlockPuzzle.resx">
+    <EmbeddedResource Include="BlockPuzzle\BlockPuzzle.resx">
       <DependentUpon>BlockPuzzle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColourCombine\ColourCombine.resx">
+      <DependentUpon>ColourCombine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
