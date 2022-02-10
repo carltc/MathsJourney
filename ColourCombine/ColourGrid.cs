@@ -86,28 +86,30 @@ namespace MathsJourney.ColourCombine
 
         public void MoveBlock(ColourBlock colourBlock, BlockMove blockMove)
         {
-            if (ValidMove(colourBlock, blockMove))
+            // Get the point of the block that wants to be overwritten
+            Point oldPoint = new Point(colourBlock.I, colourBlock.J);
+            Point newPoint;
+            switch (blockMove)
             {
-                Point oldPoint = new Point(colourBlock.I, colourBlock.J);
-                Point newPoint;
-                switch (blockMove)
-                {
-                    case BlockMove.Up:
-                        newPoint = new Point(oldPoint.X, oldPoint.Y - 1);
-                        break;
-                    case BlockMove.Down:
-                        newPoint = new Point(oldPoint.X, oldPoint.Y + 1);
-                        break;
-                    case BlockMove.Left:
-                        newPoint = new Point(oldPoint.X - 1, oldPoint.Y);
-                        break;
-                    case BlockMove.Right:
-                        newPoint = new Point(oldPoint.X + 1, oldPoint.Y);
-                        break;
-                    default:
-                        // A new blockmove which has not been implented so therefore return
-                        return;
-                }
+                case BlockMove.Up:
+                    newPoint = new Point(oldPoint.X, oldPoint.Y - 1);
+                    break;
+                case BlockMove.Down:
+                    newPoint = new Point(oldPoint.X, oldPoint.Y + 1);
+                    break;
+                case BlockMove.Left:
+                    newPoint = new Point(oldPoint.X - 1, oldPoint.Y);
+                    break;
+                case BlockMove.Right:
+                    newPoint = new Point(oldPoint.X + 1, oldPoint.Y);
+                    break;
+                default:
+                    // A new blockmove which has not been implented so therefore return
+                    return;
+            }
+
+            if (ValidMove(colourBlock, newPoint))
+            {
 
                 var overwrittenColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
 
@@ -129,53 +131,27 @@ namespace MathsJourney.ColourCombine
             }
         }
 
-        public bool ValidMove(ColourBlock colourBlock, BlockMove blockMove)
+        public bool ValidMove(ColourBlock colourBlock, Point newPoint)
         {
-            switch (blockMove)
+            // Check if the new point is within the level boundary
+            if (
+                    newPoint.Y < LevelMin.Y ||
+                    newPoint.Y > LevelMax.Y ||
+                    newPoint.X < LevelMin.X ||
+                    newPoint.X > LevelMax.X
+                )
             {
-                case BlockMove.Up:
-                    if (
-                        colourBlock.J > 0 &&
-                        colourBlock.J - 1 >= LevelMin.Y &&
-                        (ColourBlocks[colourBlock.I, colourBlock.J - 1].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I, colourBlock.J - 1].ColourType == colourBlock.ColourType)
-                        )
-                    {
-                        return true;
-                    }
-                    break;
-                case BlockMove.Down:
-                    if (
-                        colourBlock.J < GridSize - 1 &&
-                        colourBlock.J + 1 <= LevelMax.Y &&
-                        (ColourBlocks[colourBlock.I, colourBlock.J + 1].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I, colourBlock.J + 1].ColourType == colourBlock.ColourType)
-                        )
-                    {
-                        return true;
-                    }
-                    break;
-                case BlockMove.Left:
-                    if (
-                        colourBlock.I > 0 &&
-                        colourBlock.I - 1 >= LevelMin.X &&
-                        (ColourBlocks[colourBlock.I - 1, colourBlock.J].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I - 1, colourBlock.J].ColourType == colourBlock.ColourType)
-                        )
-                    {
-                        return true;
-                    }
-                    break;
-                case BlockMove.Right:
-                    if (
-                        colourBlock.I < GridSize - 1 &&
-                        colourBlock.I + 1 <= LevelMax.X &&
-                        (ColourBlocks[colourBlock.I + 1, colourBlock.J].ColourType == ColourType.Blank || ColourBlocks[colourBlock.I + 1, colourBlock.J].ColourType == colourBlock.ColourType)
-                        )
-                    {
-                        return true;
-                    }
-                    break;
+                return false;
             }
 
-            return false;
+            // Check if the block to be overwritten is blank or same type
+            var overwrittenColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
+            if (overwrittenColourBlock.ColourType != ColourType.Blank && overwrittenColourBlock.ColourType != colourBlock.ColourType)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void DrawLevelBoundary(PaintEventArgs e)
