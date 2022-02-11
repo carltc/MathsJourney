@@ -11,3 +11,4 @@ C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.BlockHunt.resourc
 C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.BlockPuzzle.resources
 C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.MainMenu.resources
 C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.ColourCombine.ColourCombine.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\Debug\MathsJourney.ColourWars.ColourWars.resources

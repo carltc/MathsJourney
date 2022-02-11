@@ -33,6 +33,7 @@ namespace MathsJourney
             this.PlayBlockHuntButton = new System.Windows.Forms.Button();
             this.PlayBlockPuzzleButton = new System.Windows.Forms.Button();
             this.PlayColourCombineButton = new System.Windows.Forms.Button();
+            this.PlayColourWarsButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,6 +42,7 @@ namespace MathsJourney
             this.flowLayoutPanel1.Controls.Add(this.PlayBlockHuntButton);
             this.flowLayoutPanel1.Controls.Add(this.PlayBlockPuzzleButton);
             this.flowLayoutPanel1.Controls.Add(this.PlayColourCombineButton);
+            this.flowLayoutPanel1.Controls.Add(this.PlayColourWarsButton);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(776, 426);
@@ -76,6 +78,16 @@ namespace MathsJourney
             this.PlayColourCombineButton.UseVisualStyleBackColor = true;
             this.PlayColourCombineButton.Click += new System.EventHandler(this.PlayColourCombineButton_Click);
             // 
+            // PlayColourWarsButton
+            // 
+            this.PlayColourWarsButton.Location = new System.Drawing.Point(3, 109);
+            this.PlayColourWarsButton.Name = "PlayColourWarsButton";
+            this.PlayColourWarsButton.Size = new System.Drawing.Size(200, 100);
+            this.PlayColourWarsButton.TabIndex = 3;
+            this.PlayColourWarsButton.Text = "Play Colour Wars";
+            this.PlayColourWarsButton.UseVisualStyleBackColor = true;
+            this.PlayColourWarsButton.Click += new System.EventHandler(this.PlayColourWarsButton_Click);
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -95,5 +107,6 @@ namespace MathsJourney
         private System.Windows.Forms.Button PlayBlockHuntButton;
         private System.Windows.Forms.Button PlayBlockPuzzleButton;
         private System.Windows.Forms.Button PlayColourCombineButton;
+        private System.Windows.Forms.Button PlayColourWarsButton;
     }
 }

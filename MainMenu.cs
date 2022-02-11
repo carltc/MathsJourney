@@ -120,5 +120,17 @@ namespace MathsJourney
 
             colourCombineGame.Show();
         }
+
+        private void PlayColourWarsButton_Click(object sender, EventArgs e)
+        {
+            ////////////////////////////
+            ///  COLOUR WARS GAME ///
+            ////////////////////////////
+
+            // Create new form window
+            var colourWarsGame = new ColourWars.ColourWars();
+
+            colourWarsGame.Show();
+        }
     }
 }
