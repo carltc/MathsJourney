@@ -8,7 +8,6 @@ namespace MathsJourney.ColourWars
     {
         private ColourGrid _parentGrid { get; set; }
         public ColourType ColourType { get; set; }
-        public ColourType ColourResidue { get; set; } = ColourType.Blank;
 
         public int I { get; set; }
         public int J { get; set; }
@@ -37,7 +36,7 @@ namespace MathsJourney.ColourWars
         public int BlockWidth { get => _parentGrid.BlockWidth; }
         public int BlockHeight { get => _parentGrid.BlockHeight; }
 
-        public bool ShouldFill { get => ColourType != ColourType.Blank || ColourResidue != ColourType.Blank; }
+        public bool ShouldFill { get => ColourType != ColourType.Blank; }
         public Color FillColour
         {
             get
@@ -51,17 +50,7 @@ namespace MathsJourney.ColourWars
                     case ColourType.Blue:
                         return Color.Blue;
                     case ColourType.Blank:
-                        switch(ColourResidue)
-                        {
-                            case ColourType.Red:
-                                return Color.PaleVioletRed;
-                            case ColourType.Green:
-                                return Color.LightGreen;
-                            case ColourType.Blue:
-                                return Color.LightBlue;
-                            default:
-                                return Color.Transparent;
-                        }
+                        return Color.Transparent;
                     default:
                         return Color.Black;
                 }

@@ -84,10 +84,10 @@ namespace MathsJourney.ColourWars
             return ColourBlocks[i, j];
         }
 
-        public void MoveBlock(ColourBlock colourBlock, BlockMove blockMove)
+        public bool MoveBlock(ColourBlock attackerColourBlock, BlockMove blockMove)
         {
             // Get the point of the block that wants to be overwritten
-            Point oldPoint = new Point(colourBlock.I, colourBlock.J);
+            Point oldPoint = new Point(attackerColourBlock.I, attackerColourBlock.J);
             Point newPoint;
             switch (blockMove)
             {
@@ -105,68 +105,98 @@ namespace MathsJourney.ColourWars
                     break;
                 default:
                     // A new blockmove which has not been implented so therefore return
-                    return;
+                    return false;
             }
 
-            if (ValidMove(colourBlock, newPoint))
+            if (ValidMove(attackerColourBlock, newPoint))
             {
-                var overwrittenColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
+                var defenderColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
 
                 // Check if this was a move of the same colour overwriting, and if so then increment the count of this block
-                if (overwrittenColourBlock.ColourType == colourBlock.ColourType)
+                if (defenderColourBlock.ColourType == attackerColourBlock.ColourType)
                 {
-                    colourBlock.Count += overwrittenColourBlock.Count;
+                    // If so then add the counts of these blocks together
+                    attackerColourBlock.Count += defenderColourBlock.Count;
                 }
                 else
                 {
-                    colourBlock.Count--;
+                    // If not then do damage
+                    var defenderHealth = GetDefenderHealth(attackerColourBlock.ColourType, defenderColourBlock.ColourType, defenderColourBlock.Count);
+                    attackerColourBlock.Count -= defenderHealth;
                 }
 
-                // Check the block count. If it is less than 1 then destroy it (but leave residue)
-                if (colourBlock.Count < 1)
-                {
-                    var destroyedBlock = new ColourBlock(this, ColourType.Blank, newPoint.X, newPoint.Y);
-                    destroyedBlock.ColourResidue = colourBlock.ColourType;
-                    ColourBlocks[newPoint.X, newPoint.Y] = destroyedBlock;
+                // Set the new location with the colour block
+                ColourBlocks[newPoint.X, newPoint.Y] = attackerColourBlock;
+                // Set the location of the new point
+                attackerColourBlock.I = newPoint.X;
+                attackerColourBlock.J = newPoint.Y;
 
-                    // Remove 1 from score
-                    Game.Score -= 1;
-                }
-                else
-                {
-                    // Set the new location with the colour block
-                    ColourBlocks[newPoint.X, newPoint.Y] = colourBlock;
-                    // Set the location of the new point
-                    colourBlock.I = newPoint.X;
-                    colourBlock.J = newPoint.Y;
-
-                    // Add 1 to score
-                    Game.Score += 1;
-                }
                 // Set the old location as blank
-                var newBlock = new ColourBlock(this, ColourType.Blank, oldPoint.X, oldPoint.Y);
-                newBlock.ColourResidue = colourBlock.ColourType;
+                var newBlock = new ColourBlock(this, attackerColourBlock.ColourType, oldPoint.X, oldPoint.Y);
                 ColourBlocks[oldPoint.X, oldPoint.Y] = newBlock;
 
+                return true;
             }
+                
+            return false;
+
         }
 
-        public bool ValidMove(ColourBlock colourBlock, Point newPoint)
+        public bool ValidMove(ColourBlock attackerColourBlock, Point newPoint)
         {
             // Check if colourblock is a blank
-            if (colourBlock.ColourType == ColourType.Blank)
+            if (attackerColourBlock.ColourType == ColourType.Blank)
             {
                 return false;
             }
 
-            // Check if the block to be overwritten is blank or same type
-            var overwrittenColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
-            if (overwrittenColourBlock.ColourType != ColourType.Blank && overwrittenColourBlock.ColourType != colourBlock.ColourType)
+            var defenderColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
+
+            // Check if the block to be overwritten can be overwritten by the count of this block
+            var defenderHealth = defenderColourBlock.Count;
+            var attackerStrength = attackerColourBlock.Count - 1;
+
+            // Upgrade defender health if weak colour attacking
+            defenderHealth = GetDefenderHealth(attackerColourBlock.ColourType, defenderColourBlock.ColourType, defenderHealth);
+
+            // Check if attack can be made
+            if (defenderHealth > attackerStrength && attackerColourBlock.ColourType != defenderColourBlock.ColourType)
             {
                 return false;
             }
 
             return true;
+        }
+
+        public int GetDefenderHealth(ColourType attacker, ColourType defender, int initialHealth)
+        {
+            // Upgrade defender health if weak colur attacking
+            switch (attacker)
+            {
+                case ColourType.Red:
+                    // RED is worse against BLUE
+                    if (defender == ColourType.Blue)
+                    {
+                        initialHealth *= 2;
+                    }
+                    break;
+                case ColourType.Green:
+                    // GREEN is worse against RED
+                    if (defender == ColourType.Red)
+                    {
+                        initialHealth *= 2;
+                    }
+                    break;
+                case ColourType.Blue:
+                    // BLUE is worse against GREEN
+                    if (defender == ColourType.Green)
+                    {
+                        initialHealth *= 2;
+                    }
+                    break;
+            }
+
+            return initialHealth;
         }
     }
 }

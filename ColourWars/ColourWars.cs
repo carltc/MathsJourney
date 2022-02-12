@@ -16,8 +16,6 @@ namespace MathsJourney.ColourWars
     {
         public ColourGrid ColourGrid { get; set; }
 
-        public int Score { get; set; } = 0;
-
         public int TeamsTurn = 1;
 
         public ColourWars()
@@ -106,16 +104,18 @@ namespace MathsJourney.ColourWars
             var deltaX =  _mouseDownEndPoint.X - _mouseDownStartPoint.X;
             var deltaY =  _mouseDownEndPoint.Y - _mouseDownStartPoint.Y;
 
+            bool moveOccured = false;
+
             if (Math.Abs(deltaX) > Math.Abs(deltaY))
             {
                 // Then move this block in the X direction
                 if (deltaX > 0)
                 {
-                    ColourGrid.MoveBlock(colourBlock, BlockMove.Right);
+                    moveOccured = ColourGrid.MoveBlock(colourBlock, BlockMove.Right);
                 }
                 else
                 {
-                    ColourGrid.MoveBlock(colourBlock, BlockMove.Left);
+                    moveOccured = ColourGrid.MoveBlock(colourBlock, BlockMove.Left);
                 }
             }
             else
@@ -123,16 +123,19 @@ namespace MathsJourney.ColourWars
                 // Then move this block in the Y direction
                 if (deltaY > 0)
                 {
-                    ColourGrid.MoveBlock(colourBlock, BlockMove.Down);
+                    moveOccured = ColourGrid.MoveBlock(colourBlock, BlockMove.Down);
                 }
                 else
                 {
-                    ColourGrid.MoveBlock(colourBlock, BlockMove.Up);
+                    moveOccured = ColourGrid.MoveBlock(colourBlock, BlockMove.Up);
                 }
             }
 
-            NextTeamTurn();
-            GameField.Refresh();
+            if (moveOccured)
+            {
+                NextTeamTurn();
+                GameField.Refresh();
+            }
         }
     }
 }
