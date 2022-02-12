@@ -28,6 +28,14 @@ namespace MathsJourney.ColourWars
         {
             // Redraw the game field
             DrawGrid(e);
+
+            // Update the strengths and block counts
+            RedStrengthLabel.Text = $"{ColourGrid.GetStrength(ColourType.Red)}";
+            GreenStrengthLabel.Text = $"{ColourGrid.GetStrength(ColourType.Green)}";
+            BlueStrengthLabel.Text = $"{ColourGrid.GetStrength(ColourType.Blue)}";
+            RedBlocksLabel.Text = $"{ColourGrid.GetBlockCount(ColourType.Red)}";
+            GreenBlocksLabel.Text = $"{ColourGrid.GetBlockCount(ColourType.Green)}";
+            BlueBlocksLabel.Text = $"{ColourGrid.GetBlockCount(ColourType.Blue)}";
         }
 
         public void DrawGrid(PaintEventArgs e)
