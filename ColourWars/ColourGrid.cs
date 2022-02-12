@@ -14,7 +14,7 @@ namespace MathsJourney.ColourWars
         /// <summary>
         /// MUST be even
         /// </summary>
-        public const int GridSize = 8;
+        public const int GridSize = 5;
 
         public ColourWars Game { get; set; }
         public Size GameFieldSize { get; set; }
@@ -81,9 +81,21 @@ namespace MathsJourney.ColourWars
         {
             int i = (int)Math.Floor((double)x / (double)BlockWidth);
             int j = (int)Math.Floor((double)y / (double)BlockHeight);
+
+            if (i < 0 || i >= GridSize || j < 0 || j >= GridSize)
+            {
+                return null;
+            }
+
             return ColourBlocks[i, j];
         }
 
+        /// <summary>
+        /// This is a move where you take you block stack and move it onto a neighbouring stack (if possible)
+        /// </summary>
+        /// <param name="attackerColourBlock"></param>
+        /// <param name="blockMove"></param>
+        /// <returns></returns>
         public bool MoveBlock(ColourBlock attackerColourBlock, BlockMove blockMove)
         {
             // Get the point of the block that wants to be overwritten
@@ -156,6 +168,17 @@ namespace MathsJourney.ColourWars
                 
             return false;
 
+        }
+
+        /// <summary>
+        /// This is a move where you just add 1 count to the block
+        /// </summary>
+        /// <param name="colourBlock"></param>
+        /// <returns></returns>
+        public bool AddToBlock(ColourBlock colourBlock)
+        {
+            colourBlock.Count += 1;
+            return true;
         }
 
         private List<ColourBlock> CheckSquareCreated(ColourBlock colourBlock)
@@ -335,6 +358,12 @@ namespace MathsJourney.ColourWars
         {
             // Check if colourblock is a blank
             if (attackerColourBlock.ColourType == ColourType.Blank)
+            {
+                return false;
+            }
+
+            // Check if move is within bounds of the play area
+            if (newPoint.X < 0 || newPoint.X >= GridSize || newPoint.Y < 0 || newPoint.Y >= GridSize)
             {
                 return false;
             }

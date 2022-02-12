@@ -35,7 +35,7 @@ namespace MathsJourney.ColourWars
             this.BlueTeamLabel = new System.Windows.Forms.Label();
             this.StrengthLabel = new System.Windows.Forms.Label();
             this.BlocksLabel = new System.Windows.Forms.Label();
-            this.BadAgainstLabel = new System.Windows.Forms.Label();
+            this.GoodBadLabel = new System.Windows.Forms.Label();
             this.GreenBadAgainstLabel = new System.Windows.Forms.Label();
             this.BlueBadAgainstLabel = new System.Windows.Forms.Label();
             this.RedBadAgainstLabel = new System.Windows.Forms.Label();
@@ -45,6 +45,10 @@ namespace MathsJourney.ColourWars
             this.GreenBlocksLabel = new System.Windows.Forms.Label();
             this.BlueStrengthLabel = new System.Windows.Forms.Label();
             this.BlueBlocksLabel = new System.Windows.Forms.Label();
+            this.RedGoodAgainstLabel = new System.Windows.Forms.Label();
+            this.BlueGoodAgainstLabel = new System.Windows.Forms.Label();
+            this.GreenGoodAgainstLabel = new System.Windows.Forms.Label();
+            this.SkipTurnButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.GameField)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,45 +115,45 @@ namespace MathsJourney.ColourWars
             this.BlocksLabel.TabIndex = 5;
             this.BlocksLabel.Text = "Blocks:";
             // 
-            // BadAgainstLabel
+            // GoodBadLabel
             // 
-            this.BadAgainstLabel.AutoSize = true;
-            this.BadAgainstLabel.Location = new System.Drawing.Point(12, 119);
-            this.BadAgainstLabel.Name = "BadAgainstLabel";
-            this.BadAgainstLabel.Size = new System.Drawing.Size(67, 13);
-            this.BadAgainstLabel.TabIndex = 6;
-            this.BadAgainstLabel.Text = "Bad Against:";
+            this.GoodBadLabel.AutoSize = true;
+            this.GoodBadLabel.Location = new System.Drawing.Point(12, 119);
+            this.GoodBadLabel.Name = "GoodBadLabel";
+            this.GoodBadLabel.Size = new System.Drawing.Size(57, 13);
+            this.GoodBadLabel.TabIndex = 6;
+            this.GoodBadLabel.Text = "Good/Bad";
             // 
             // GreenBadAgainstLabel
             // 
             this.GreenBadAgainstLabel.AutoSize = true;
-            this.GreenBadAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GreenBadAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GreenBadAgainstLabel.ForeColor = System.Drawing.Color.Red;
-            this.GreenBadAgainstLabel.Location = new System.Drawing.Point(267, 116);
+            this.GreenBadAgainstLabel.Location = new System.Drawing.Point(269, 133);
             this.GreenBadAgainstLabel.Name = "GreenBadAgainstLabel";
-            this.GreenBadAgainstLabel.Size = new System.Drawing.Size(40, 16);
+            this.GreenBadAgainstLabel.Size = new System.Drawing.Size(33, 13);
             this.GreenBadAgainstLabel.TabIndex = 7;
             this.GreenBadAgainstLabel.Text = "RED";
             // 
             // BlueBadAgainstLabel
             // 
             this.BlueBadAgainstLabel.AutoSize = true;
-            this.BlueBadAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BlueBadAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BlueBadAgainstLabel.ForeColor = System.Drawing.Color.Green;
-            this.BlueBadAgainstLabel.Location = new System.Drawing.Point(410, 116);
+            this.BlueBadAgainstLabel.Location = new System.Drawing.Point(428, 133);
             this.BlueBadAgainstLabel.Name = "BlueBadAgainstLabel";
-            this.BlueBadAgainstLabel.Size = new System.Drawing.Size(61, 16);
+            this.BlueBadAgainstLabel.Size = new System.Drawing.Size(50, 13);
             this.BlueBadAgainstLabel.TabIndex = 8;
             this.BlueBadAgainstLabel.Text = "GREEN";
             // 
             // RedBadAgainstLabel
             // 
             this.RedBadAgainstLabel.AutoSize = true;
-            this.RedBadAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RedBadAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RedBadAgainstLabel.ForeColor = System.Drawing.Color.Blue;
-            this.RedBadAgainstLabel.Location = new System.Drawing.Point(112, 116);
+            this.RedBadAgainstLabel.Location = new System.Drawing.Point(122, 133);
             this.RedBadAgainstLabel.Name = "RedBadAgainstLabel";
-            this.RedBadAgainstLabel.Size = new System.Drawing.Size(47, 16);
+            this.RedBadAgainstLabel.Size = new System.Drawing.Size(39, 13);
             this.RedBadAgainstLabel.TabIndex = 9;
             this.RedBadAgainstLabel.Text = "BLUE";
             // 
@@ -219,11 +223,58 @@ namespace MathsJourney.ColourWars
             this.BlueBlocksLabel.TabIndex = 15;
             this.BlueBlocksLabel.Text = "0";
             // 
+            // RedGoodAgainstLabel
+            // 
+            this.RedGoodAgainstLabel.AutoSize = true;
+            this.RedGoodAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RedGoodAgainstLabel.ForeColor = System.Drawing.Color.Green;
+            this.RedGoodAgainstLabel.Location = new System.Drawing.Point(101, 111);
+            this.RedGoodAgainstLabel.Name = "RedGoodAgainstLabel";
+            this.RedGoodAgainstLabel.Size = new System.Drawing.Size(72, 20);
+            this.RedGoodAgainstLabel.TabIndex = 16;
+            this.RedGoodAgainstLabel.Text = "GREEN";
+            // 
+            // BlueGoodAgainstLabel
+            // 
+            this.BlueGoodAgainstLabel.AutoSize = true;
+            this.BlueGoodAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BlueGoodAgainstLabel.ForeColor = System.Drawing.Color.Red;
+            this.BlueGoodAgainstLabel.Location = new System.Drawing.Point(400, 111);
+            this.BlueGoodAgainstLabel.Name = "BlueGoodAgainstLabel";
+            this.BlueGoodAgainstLabel.Size = new System.Drawing.Size(47, 20);
+            this.BlueGoodAgainstLabel.TabIndex = 17;
+            this.BlueGoodAgainstLabel.Text = "RED";
+            // 
+            // GreenGoodAgainstLabel
+            // 
+            this.GreenGoodAgainstLabel.AutoSize = true;
+            this.GreenGoodAgainstLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GreenGoodAgainstLabel.ForeColor = System.Drawing.Color.Blue;
+            this.GreenGoodAgainstLabel.Location = new System.Drawing.Point(232, 111);
+            this.GreenGoodAgainstLabel.Name = "GreenGoodAgainstLabel";
+            this.GreenGoodAgainstLabel.Size = new System.Drawing.Size(56, 20);
+            this.GreenGoodAgainstLabel.TabIndex = 18;
+            this.GreenGoodAgainstLabel.Text = "BLUE";
+            // 
+            // SkipTurnButton
+            // 
+            this.SkipTurnButton.Location = new System.Drawing.Point(4, 5);
+            this.SkipTurnButton.Name = "SkipTurnButton";
+            this.SkipTurnButton.Size = new System.Drawing.Size(75, 23);
+            this.SkipTurnButton.TabIndex = 19;
+            this.SkipTurnButton.Text = "Skip Turn";
+            this.SkipTurnButton.UseVisualStyleBackColor = true;
+            this.SkipTurnButton.Click += new System.EventHandler(this.SkipTurnButton_Click);
+            // 
             // ColourWars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(529, 661);
+            this.Controls.Add(this.SkipTurnButton);
+            this.Controls.Add(this.GreenGoodAgainstLabel);
+            this.Controls.Add(this.BlueGoodAgainstLabel);
+            this.Controls.Add(this.RedGoodAgainstLabel);
             this.Controls.Add(this.BlueBlocksLabel);
             this.Controls.Add(this.BlueStrengthLabel);
             this.Controls.Add(this.GreenBlocksLabel);
@@ -233,7 +284,7 @@ namespace MathsJourney.ColourWars
             this.Controls.Add(this.RedBadAgainstLabel);
             this.Controls.Add(this.BlueBadAgainstLabel);
             this.Controls.Add(this.GreenBadAgainstLabel);
-            this.Controls.Add(this.BadAgainstLabel);
+            this.Controls.Add(this.GoodBadLabel);
             this.Controls.Add(this.BlocksLabel);
             this.Controls.Add(this.StrengthLabel);
             this.Controls.Add(this.BlueTeamLabel);
@@ -257,7 +308,7 @@ namespace MathsJourney.ColourWars
         private System.Windows.Forms.Label BlueTeamLabel;
         private System.Windows.Forms.Label StrengthLabel;
         private System.Windows.Forms.Label BlocksLabel;
-        private System.Windows.Forms.Label BadAgainstLabel;
+        private System.Windows.Forms.Label GoodBadLabel;
         private System.Windows.Forms.Label GreenBadAgainstLabel;
         private System.Windows.Forms.Label BlueBadAgainstLabel;
         private System.Windows.Forms.Label RedBadAgainstLabel;
@@ -267,5 +318,9 @@ namespace MathsJourney.ColourWars
         private System.Windows.Forms.Label GreenBlocksLabel;
         private System.Windows.Forms.Label BlueStrengthLabel;
         private System.Windows.Forms.Label BlueBlocksLabel;
+        private System.Windows.Forms.Label RedGoodAgainstLabel;
+        private System.Windows.Forms.Label BlueGoodAgainstLabel;
+        private System.Windows.Forms.Label GreenGoodAgainstLabel;
+        private System.Windows.Forms.Button SkipTurnButton;
     }
 }
