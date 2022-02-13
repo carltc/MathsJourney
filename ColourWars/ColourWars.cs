@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -13,21 +14,29 @@ namespace MathsJourney.ColourWars
 
         public int TeamsTurn = 1;
 
-        private bool GameIsLive = true;
+        public bool GameIsLive = true;
+
+        public ColourType Winner { get; set; }
 
         public ComputerPlayer RedPlayer { get; set; }
         public ComputerPlayer GreenPlayer { get; set; }
         public ComputerPlayer BluePlayer { get; set; }
 
-        public ColourWars()
+        public ColourWars(MoveScoreWeightings redScoreWeightings, MoveScoreWeightings greenScoreWeightings, MoveScoreWeightings blueScoreWeightings)
         {
             InitializeComponent();
             ColourGrid = new ColourGrid("MainGrid", this, GameField.Size);
 
             // Create Computer players for Green and Blue teams
-            RedPlayer = new ComputerPlayer(ColourGrid, ColourType.Red);
-            GreenPlayer = new ComputerPlayer(ColourGrid, ColourType.Green);
-            BluePlayer = new ComputerPlayer(ColourGrid, ColourType.Blue);
+            RedPlayer = new ComputerPlayer(redScoreWeightings, ColourGrid, ColourType.Red);
+            GreenPlayer = new ComputerPlayer(greenScoreWeightings, ColourGrid, ColourType.Green);
+            BluePlayer = new ComputerPlayer(blueScoreWeightings, ColourGrid, ColourType.Blue);
+        }
+
+        public void BeginGame()
+        {
+            // Begin the match
+            NextTeamTurn();
         }
 
         public void RefreshGameField()
@@ -131,6 +140,7 @@ namespace MathsJourney.ColourWars
         private void CheckGameOver()
         {
             int teamsOut = 0;
+            var remainingTeams = new List<ColourType>();
 
             for (int i = 1; i < Enum.GetNames(typeof(ColourType)).Length; i++)
             {
@@ -138,11 +148,16 @@ namespace MathsJourney.ColourWars
                 {
                     teamsOut++;
                 }
+                else
+                {
+                    remainingTeams.Add((ColourType)i);
+                }
             }
 
-            if (teamsOut >= Enum.GetNames(typeof(ColourType)).Length - 2)
+            if (remainingTeams.Count == 1)
             {
                 GameIsLive = false;
+                Winner = remainingTeams[0];
             }
         }
 

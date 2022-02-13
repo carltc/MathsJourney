@@ -34,6 +34,7 @@ namespace MathsJourney
             this.PlayBlockPuzzleButton = new System.Windows.Forms.Button();
             this.PlayColourCombineButton = new System.Windows.Forms.Button();
             this.PlayColourWarsButton = new System.Windows.Forms.Button();
+            this.LearnColourWarsButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,9 +44,10 @@ namespace MathsJourney
             this.flowLayoutPanel1.Controls.Add(this.PlayBlockPuzzleButton);
             this.flowLayoutPanel1.Controls.Add(this.PlayColourCombineButton);
             this.flowLayoutPanel1.Controls.Add(this.PlayColourWarsButton);
+            this.flowLayoutPanel1.Controls.Add(this.LearnColourWarsButton);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(776, 426);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(776, 319);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // PlayBlockHuntButton
@@ -88,6 +90,16 @@ namespace MathsJourney
             this.PlayColourWarsButton.UseVisualStyleBackColor = true;
             this.PlayColourWarsButton.Click += new System.EventHandler(this.PlayColourWarsButton_Click);
             // 
+            // LearnColourWarsButton
+            // 
+            this.LearnColourWarsButton.Location = new System.Drawing.Point(209, 109);
+            this.LearnColourWarsButton.Name = "LearnColourWarsButton";
+            this.LearnColourWarsButton.Size = new System.Drawing.Size(200, 100);
+            this.LearnColourWarsButton.TabIndex = 4;
+            this.LearnColourWarsButton.Text = "Learn Colour Wars";
+            this.LearnColourWarsButton.UseVisualStyleBackColor = true;
+            this.LearnColourWarsButton.Click += new System.EventHandler(this.LearnColourWarsButton_Click);
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -108,5 +120,6 @@ namespace MathsJourney
         private System.Windows.Forms.Button PlayBlockPuzzleButton;
         private System.Windows.Forms.Button PlayColourCombineButton;
         private System.Windows.Forms.Button PlayColourWarsButton;
+        private System.Windows.Forms.Button LearnColourWarsButton;
     }
 }

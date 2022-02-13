@@ -64,58 +64,55 @@ namespace MathsJourney.ColourWars
             }
         }
 
-        private const double thisCountWeighting = 1.0;
-        private const double otherCountWeighting = 1.0;
-        private const double predictedStrengthWeighting = 10.0;
-        private const double predictedBlockCountWeighting = 100.0;
-        private const double surroundingEnemyBlockWeighting = 1.0;
-        private const double attackWeighting = 100.0;
-        private const double attackWeakWeighting = 1.0;
-        private const double attackStrongWeighting = 1.0;
-        public int MoveScore
+        //private const double thisCountWeighting = 1.0;
+        //private const double otherCountWeighting = 1.0;
+        //private const double predictedStrengthWeighting = 10.0;
+        //private const double predictedBlockCountWeighting = 100.0;
+        //private const double surroundingEnemyBlockWeighting = 1.0;
+        //private const double attackWeighting = 100.0;
+        //private const double attackWeakWeighting = 1.0;
+        //private const double attackStrongWeighting = 1.0;
+        public int MoveScore(MoveScoreWeightings moveScoreWeightings)
         {
-            get
+            // A way over determining how good this move is
+            var totalScore = 0;
+
+            // Add the count of this block to the score
+            totalScore += (int)(_colourGrid[I, J].Count * moveScoreWeightings.thisCountWeighting);
+
+            // Add the count of the block moving onto if it is same type
+            if (_colourGrid[NewI, NewJ].ColourType == ColourType)
             {
-                // A way over determining how good this move is
-                var totalScore = 0;
-
-                // Add the count of this block to the score
-                totalScore += (int)(_colourGrid[I, J].Count * thisCountWeighting);
-
-                // Add the count of the block moving onto if it is same type
-                if (_colourGrid[NewI, NewJ].ColourType == ColourType)
-                {
-                    totalScore += (int)(_colourGrid[NewI, NewJ].Count * otherCountWeighting);
-                }
-                else
-                {
-                    // add a number if this is an attack move
-                    totalScore += (int)attackWeighting;
-
-                    // add a number if this is attacking your weakness
-                    if (GetWeakColourType(ColourType) == _colourGrid[NewI, NewJ].ColourType)
-                    {
-                        totalScore += (int)attackWeakWeighting;
-                    }
-
-                    // add a number if this is attacking your strength
-                    if (GetStrongColourType(ColourType) == _colourGrid[NewI, NewJ].ColourType)
-                    {
-                        totalScore += (int)attackStrongWeighting;
-                    }
-                }
-
-                // add predicted strength after this move
-                totalScore += (int)(PredictedStrength * predictedStrengthWeighting);
-
-                // add predicted block count after this move
-                totalScore += (int)(PredictedBlockCount * predictedBlockCountWeighting);
-
-                // add number of surrounding enemy blocks after this move
-                totalScore += (int)(PredictedBlockCount * surroundingEnemyBlockWeighting);
-
-                return totalScore;
+                totalScore += (int)(_colourGrid[NewI, NewJ].Count * moveScoreWeightings.otherCountWeighting);
             }
+            else
+            {
+                // add a number if this is an attack move
+                totalScore += (int)moveScoreWeightings.attackWeighting;
+
+                // add a number if this is attacking your weakness
+                if (GetWeakColourType(ColourType) == _colourGrid[NewI, NewJ].ColourType)
+                {
+                    totalScore += (int)moveScoreWeightings.attackWeakWeighting;
+                }
+
+                // add a number if this is attacking your strength
+                if (GetStrongColourType(ColourType) == _colourGrid[NewI, NewJ].ColourType)
+                {
+                    totalScore += (int)moveScoreWeightings.attackStrongWeighting;
+                }
+            }
+
+            // add predicted strength after this move
+            totalScore += (int)(PredictedStrength * moveScoreWeightings.predictedStrengthWeighting);
+
+            // add predicted block count after this move
+            totalScore += (int)(PredictedBlockCount * moveScoreWeightings.predictedBlockCountWeighting);
+
+            // add number of surrounding enemy blocks after this move
+            totalScore += (int)(PredictedBlockCount * moveScoreWeightings.surroundingEnemyBlockWeighting);
+
+            return totalScore;
         }
 
         private ColourGrid _colourGrid { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathsJourney.ColourWars;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -128,9 +129,18 @@ namespace MathsJourney
             ////////////////////////////
 
             // Create new form window
-            var colourWarsGame = new ColourWars.ColourWars();
+            var colourWarsGame = new ColourWars.ColourWars(new ColourWars.MoveScoreWeightings(), new ColourWars.MoveScoreWeightings(), new ColourWars.MoveScoreWeightings());
 
             colourWarsGame.Show();
+
+            colourWarsGame.BeginGame();
+
+            colourWarsGame.Close();
+        }
+
+        private void LearnColourWarsButton_Click(object sender, EventArgs e)
+        {
+            new LearnColourWars().Show();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MathsJourney.ColourWars
 {
     public class ComputerPlayer
     {
-        public const int ComputerPlayDelay = 100;
+        public const int ComputerPlayDelay = 0;
 
         public ColourType ColourType { get; set; }
 
@@ -16,8 +16,11 @@ namespace MathsJourney.ColourWars
 
         private PlayerMove _previousMove { get; set; }
 
-        public ComputerPlayer(ColourGrid colourGrid, ColourType colourType)
+        public MoveScoreWeightings MoveScoreWeightings { get; set; }
+
+        public ComputerPlayer(MoveScoreWeightings moveScoreWeightings, ColourGrid colourGrid, ColourType colourType)
         {
+            MoveScoreWeightings = moveScoreWeightings;
             ColourGrid = colourGrid;
             ColourType = colourType;
         }
@@ -31,7 +34,7 @@ namespace MathsJourney.ColourWars
                 //.OrderByDescending(pm => pm.SurroundingEnemyBlocks) // Number of enemy blocks around so that moves near enemies are prioritised
                 //.OrderByDescending(pm => pm.PredictedStrength) // Block strength so that players try to make moves which will increase their strength the most
                 //.OrderByDescending(pm => pm.PredictedBlockCount) // Block count so that players always try to take a new block (increase their block count)
-                .OrderByDescending(pm => pm.MoveScore)
+                .OrderByDescending(pm => pm.MoveScore(MoveScoreWeightings))
                 .ToList();
 
             ColourGrid.Game.RefreshGameField();
@@ -42,10 +45,8 @@ namespace MathsJourney.ColourWars
                 List<int> sameMoveIndices = new List<int>(); ;
                 for (int i = 0; i < possibleMoves.Count(); i++)
                 {
-                    if (_previousMove.I == possibleMoves[i].I 
-                        && _previousMove.J == possibleMoves[i].J 
-                        &&_previousMove.NewI == possibleMoves[i].NewI 
-                        && _previousMove.NewJ == possibleMoves[i].NewJ 
+                    if (((_previousMove.I == possibleMoves[i].I  && _previousMove.J == possibleMoves[i].J)
+                        || (_previousMove.NewI == possibleMoves[i].NewI  && _previousMove.NewJ == possibleMoves[i].NewJ))
                         && _previousMove.BlockMove == possibleMoves[i].BlockMove)
                     {
                         sameMoveIndices.Add(i);
@@ -92,5 +93,7 @@ namespace MathsJourney.ColourWars
 
             return moveMade;
         }
+
+
     }
 }

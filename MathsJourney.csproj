@@ -81,6 +81,13 @@
     <Compile Include="ColourWars\ColourGrid.cs" />
     <Compile Include="ColourWars\ColourType.cs" />
     <Compile Include="ColourWars\ComputerPlayer.cs" />
+    <Compile Include="ColourWars\LearnColourWars.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ColourWars\LearnColourWars.Designer.cs">
+      <DependentUpon>LearnColourWars.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColourWars\MoveScoreWeightings.cs" />
     <Compile Include="ColourWars\PlayerMove.cs" />
     <Compile Include="DrawingHelper.cs" />
     <Compile Include="MainMenu.cs">
@@ -105,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ColourWars\ColourWars.resx">
       <DependentUpon>ColourWars.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColourWars\LearnColourWars.resx">
+      <DependentUpon>LearnColourWars.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
