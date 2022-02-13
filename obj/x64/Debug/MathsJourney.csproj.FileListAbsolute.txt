@@ -1,0 +1,14 @@
+C:\Users\Carl\source\repos\MathsJourney\bin\x64\Debug\MathsJourney.exe.config
+C:\Users\Carl\source\repos\MathsJourney\bin\x64\Debug\MathsJourney.exe
+C:\Users\Carl\source\repos\MathsJourney\bin\x64\Debug\MathsJourney.pdb
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.BlockHunt.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.BlockPuzzle.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.ColourCombine.ColourCombine.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.ColourWars.ColourWars.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.ColourWars.LearnColourWars.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.MainMenu.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.Properties.Resources.resources
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.csproj.GenerateResource.cache
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.csproj.CoreCompileInputs.cache
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.exe
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.pdb

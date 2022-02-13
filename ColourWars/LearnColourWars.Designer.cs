@@ -36,6 +36,7 @@ namespace MathsJourney.ColourWars
             this.BluePropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.GreenPlayerLabel = new System.Windows.Forms.Label();
             this.GreenPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.ResultsPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.SuspendLayout();
             // 
             // BeginLearningButton
@@ -71,7 +72,7 @@ namespace MathsJourney.ColourWars
             this.BluePlayerLabel.AutoSize = true;
             this.BluePlayerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BluePlayerLabel.ForeColor = System.Drawing.Color.Blue;
-            this.BluePlayerLabel.Location = new System.Drawing.Point(254, 46);
+            this.BluePlayerLabel.Location = new System.Drawing.Point(496, 46);
             this.BluePlayerLabel.Name = "BluePlayerLabel";
             this.BluePlayerLabel.Size = new System.Drawing.Size(72, 31);
             this.BluePlayerLabel.TabIndex = 4;
@@ -79,7 +80,7 @@ namespace MathsJourney.ColourWars
             // 
             // BluePropertyGrid
             // 
-            this.BluePropertyGrid.Location = new System.Drawing.Point(254, 80);
+            this.BluePropertyGrid.Location = new System.Drawing.Point(496, 80);
             this.BluePropertyGrid.Name = "BluePropertyGrid";
             this.BluePropertyGrid.Size = new System.Drawing.Size(236, 304);
             this.BluePropertyGrid.TabIndex = 3;
@@ -89,7 +90,7 @@ namespace MathsJourney.ColourWars
             this.GreenPlayerLabel.AutoSize = true;
             this.GreenPlayerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GreenPlayerLabel.ForeColor = System.Drawing.Color.Green;
-            this.GreenPlayerLabel.Location = new System.Drawing.Point(496, 46);
+            this.GreenPlayerLabel.Location = new System.Drawing.Point(254, 46);
             this.GreenPlayerLabel.Name = "GreenPlayerLabel";
             this.GreenPlayerLabel.Size = new System.Drawing.Size(94, 31);
             this.GreenPlayerLabel.TabIndex = 6;
@@ -97,16 +98,24 @@ namespace MathsJourney.ColourWars
             // 
             // GreenPropertyGrid
             // 
-            this.GreenPropertyGrid.Location = new System.Drawing.Point(496, 80);
+            this.GreenPropertyGrid.Location = new System.Drawing.Point(254, 80);
             this.GreenPropertyGrid.Name = "GreenPropertyGrid";
             this.GreenPropertyGrid.Size = new System.Drawing.Size(236, 304);
             this.GreenPropertyGrid.TabIndex = 5;
+            // 
+            // ResultsPropertyGrid
+            // 
+            this.ResultsPropertyGrid.Location = new System.Drawing.Point(854, 12);
+            this.ResultsPropertyGrid.Name = "ResultsPropertyGrid";
+            this.ResultsPropertyGrid.Size = new System.Drawing.Size(319, 426);
+            this.ResultsPropertyGrid.TabIndex = 7;
             // 
             // LearnColourWars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1185, 450);
+            this.Controls.Add(this.ResultsPropertyGrid);
             this.Controls.Add(this.GreenPlayerLabel);
             this.Controls.Add(this.GreenPropertyGrid);
             this.Controls.Add(this.BluePlayerLabel);
@@ -130,5 +139,6 @@ namespace MathsJourney.ColourWars
         private System.Windows.Forms.PropertyGrid BluePropertyGrid;
         private System.Windows.Forms.Label GreenPlayerLabel;
         private System.Windows.Forms.PropertyGrid GreenPropertyGrid;
+        private System.Windows.Forms.PropertyGrid ResultsPropertyGrid;
     }
 }

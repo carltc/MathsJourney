@@ -229,6 +229,8 @@ namespace MathsJourney.ColourWars
 
             while(!noMoreSquares)
             {
+                blocksInSqaure = new List<ColourBlock>();
+
                 // Start by incrementing the square size to check
                 squareSize++;
                 noMoreSquares = true;
@@ -287,11 +289,12 @@ namespace MathsJourney.ColourWars
             if (blocksInSqaure.Count > 0)
             {
                 bool validSquare = true;
-                List<ColourBlock> blocksInSquareCheck = new List<ColourBlock>();
 
                 while (validSquare)
                 {
-                    for(int i = 0; i < squareSize; i++)
+                    List<ColourBlock> blocksInSquareCheck = new List<ColourBlock>();
+
+                    for (int i = 0; i < squareSize; i++)
                     {
                         int iIndex = colourBlock.I + (i * -xAdd[bestDir]);
                         int jIndex = colourBlock.J + -yAdd[bestDir];

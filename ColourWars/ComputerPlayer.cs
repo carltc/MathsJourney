@@ -18,10 +18,28 @@ namespace MathsJourney.ColourWars
 
         public MoveScoreWeightings MoveScoreWeightings { get; set; }
 
-        public ComputerPlayer(MoveScoreWeightings moveScoreWeightings, ColourGrid colourGrid, ColourType colourType)
+        public int Strength
+        {
+            get { return ColourGrid.GetStrength(ColourType); }
+        }
+        
+        public int BlockCount
+        {
+            get { return ColourGrid.GetBlockCount(ColourType); }
+        }
+        
+        public int Score
+        {
+            get { return Strength + BlockCount; }
+        }
+
+        public int TotalScore { get; set; }
+
+        public int Wins { get; set; } = 0;
+
+        public ComputerPlayer(MoveScoreWeightings moveScoreWeightings, ColourType colourType)
         {
             MoveScoreWeightings = moveScoreWeightings;
-            ColourGrid = colourGrid;
             ColourType = colourType;
         }
 

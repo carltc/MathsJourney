@@ -16,21 +16,37 @@ namespace MathsJourney.ColourWars
 
         public bool GameIsLive = true;
 
-        public ColourType Winner { get; set; }
+        private int MovesMade = 0;
+
+        private int MaxMatchMoves = 0;
+
+        public ComputerPlayer Winner { get; set; }
 
         public ComputerPlayer RedPlayer { get; set; }
         public ComputerPlayer GreenPlayer { get; set; }
         public ComputerPlayer BluePlayer { get; set; }
 
-        public ColourWars(MoveScoreWeightings redScoreWeightings, MoveScoreWeightings greenScoreWeightings, MoveScoreWeightings blueScoreWeightings)
+        public List<ComputerPlayer> Players { get; set; }
+
+        public ColourWars(ComputerPlayer redPlayer, ComputerPlayer greenPlayer, ComputerPlayer bluePlayer, int MatchMoves = 0)
         {
             InitializeComponent();
             ColourGrid = new ColourGrid("MainGrid", this, GameField.Size);
 
             // Create Computer players for Green and Blue teams
-            RedPlayer = new ComputerPlayer(redScoreWeightings, ColourGrid, ColourType.Red);
-            GreenPlayer = new ComputerPlayer(greenScoreWeightings, ColourGrid, ColourType.Green);
-            BluePlayer = new ComputerPlayer(blueScoreWeightings, ColourGrid, ColourType.Blue);
+            RedPlayer = redPlayer; // new ComputerPlayer(redScoreWeightings, ColourGrid, ColourType.Red);
+            RedPlayer.ColourGrid = ColourGrid;
+
+            GreenPlayer = greenPlayer; // new ComputerPlayer(greenScoreWeightings, ColourGrid, ColourType.Green);
+            GreenPlayer.ColourGrid = ColourGrid;
+
+            BluePlayer = bluePlayer; // new ComputerPlayer(blueScoreWeightings, ColourGrid, ColourType.Blue);
+            BluePlayer.ColourGrid = ColourGrid;
+
+            Players = new List<ComputerPlayer>() { RedPlayer, GreenPlayer, BluePlayer };
+
+            // Set the maximum match moves
+            MaxMatchMoves = MatchMoves;
         }
 
         public void BeginGame()
@@ -88,16 +104,17 @@ namespace MathsJourney.ColourWars
         {
             if (GameIsLive)
             {
-                // Check if game is finished
-                CheckGameOver();
-
                 // Switch team that is to play
                 TeamsTurn++;
 
                 if (TeamsTurn > Enum.GetNames(typeof(ColourType)).Length - 1)
                 {
                     TeamsTurn = 1;
+                    MovesMade++;
                 }
+
+                // Check if game is finished
+                CheckGameOver();
 
                 // Perform some checks on this team to see if a it is knocked out or has only 1 move left or cannot do any moves
                 if (ColourGrid.GetBlockCount((ColourType)TeamsTurn) <= 0)
@@ -139,26 +156,54 @@ namespace MathsJourney.ColourWars
 
         private void CheckGameOver()
         {
-            int teamsOut = 0;
-            var remainingTeams = new List<ColourType>();
-
-            for (int i = 1; i < Enum.GetNames(typeof(ColourType)).Length; i++)
+            // Check if this is a move counted match and if so, has the maximum been reached
+            if (MaxMatchMoves > 0)
             {
-                if (ColourGrid.GetBlockCount((ColourType)i) <= 0)
+                if (MovesMade >= MaxMatchMoves)
+                {
+                    // Player with highest strength - block ratio wins
+                    if (RedPlayer.Score > GreenPlayer.Score && RedPlayer.Score > BluePlayer.Score)
+                    {
+                        EndMatch(RedPlayer);
+                    }
+                    else if (GreenPlayer.Score > BluePlayer.Score)
+                    {
+                        EndMatch(GreenPlayer);
+                    }
+                    else
+                    {
+                        EndMatch(BluePlayer);
+                    }
+                }
+            }
+
+            int teamsOut = 0;
+            var remainingTeams = new List<ComputerPlayer>();
+
+            foreach(var player in Players)
+            {
+                if (player.BlockCount <= 0)
                 {
                     teamsOut++;
                 }
                 else
                 {
-                    remainingTeams.Add((ColourType)i);
+                    remainingTeams.Add(player);
                 }
             }
 
             if (remainingTeams.Count == 1)
             {
-                GameIsLive = false;
-                Winner = remainingTeams[0];
+                EndMatch(remainingTeams[0]);
             }
+        }
+
+        private void EndMatch(ComputerPlayer winner)
+        {
+            GameIsLive = false;
+            Winner = winner;
+            Winner.Wins++;
+            winner.TotalScore += winner.Score;
         }
 
         private void StrikeOutTeamLabels(int teamsTurn)

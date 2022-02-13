@@ -128,14 +128,31 @@ namespace MathsJourney
             ///  COLOUR WARS GAME ///
             ////////////////////////////
 
+            // A good move score weighting
+            var moveScoreWeighting = new MoveScoreWeightings()
+            {
+                thisCountWeighting = 13,
+                otherCountWeighting = 27,
+                predictedStrengthWeighting = -61,
+                predictedBlockCountWeighting = 0,
+                surroundingEnemyBlockWeighting = 38,
+                attackWeighting = 134,
+                attackWeakWeighting = 23,
+                attackStrongWeighting = -126
+            };
+            
             // Create new form window
-            var colourWarsGame = new ColourWars.ColourWars(new ColourWars.MoveScoreWeightings(), new ColourWars.MoveScoreWeightings(), new ColourWars.MoveScoreWeightings());
+            var redPlayer = new ComputerPlayer(moveScoreWeighting, ColourType.Red);
+            var greenPlayer = new ComputerPlayer(moveScoreWeighting, ColourType.Green);
+            var bluePlayer = new ComputerPlayer(moveScoreWeighting, ColourType.Blue);
+
+            var colourWarsGame = new ColourWars.ColourWars(redPlayer, greenPlayer, bluePlayer, 100);
 
             colourWarsGame.Show();
 
             colourWarsGame.BeginGame();
 
-            colourWarsGame.Close();
+            //colourWarsGame.Close();
         }
 
         private void LearnColourWarsButton_Click(object sender, EventArgs e)
