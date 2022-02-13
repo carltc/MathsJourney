@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
-using static MathsJourney.DrawingHelper;
 using static MathsJourney.ColourWars.ColourTypeHelper;
+using static MathsJourney.DrawingHelper;
 
 namespace MathsJourney.ColourWars
 {
@@ -18,10 +13,26 @@ namespace MathsJourney.ColourWars
 
         public int TeamsTurn = 1;
 
+        private bool GameIsLive = true;
+
+        public ComputerPlayer RedPlayer { get; set; }
+        public ComputerPlayer GreenPlayer { get; set; }
+        public ComputerPlayer BluePlayer { get; set; }
+
         public ColourWars()
         {
             InitializeComponent();
-            ColourGrid = new ColourGrid(this, GameField.Size);
+            ColourGrid = new ColourGrid("MainGrid", this, GameField.Size);
+
+            // Create Computer players for Green and Blue teams
+            RedPlayer = new ComputerPlayer(ColourGrid, ColourType.Red);
+            GreenPlayer = new ComputerPlayer(ColourGrid, ColourType.Green);
+            BluePlayer = new ComputerPlayer(ColourGrid, ColourType.Blue);
+        }
+
+        public void RefreshGameField()
+        {
+            GameField.Refresh();
         }
 
         private void GameField_Paint(object sender, PaintEventArgs e)
@@ -31,11 +42,17 @@ namespace MathsJourney.ColourWars
 
             // Update the strengths and block counts
             RedStrengthLabel.Text = $"{ColourGrid.GetStrength(ColourType.Red)}";
+            RedStrengthLabel.Refresh();
             GreenStrengthLabel.Text = $"{ColourGrid.GetStrength(ColourType.Green)}";
+            GreenStrengthLabel.Refresh();
             BlueStrengthLabel.Text = $"{ColourGrid.GetStrength(ColourType.Blue)}";
+            BlueStrengthLabel.Refresh();
             RedBlocksLabel.Text = $"{ColourGrid.GetBlockCount(ColourType.Red)}";
+            RedBlocksLabel.Refresh();
             GreenBlocksLabel.Text = $"{ColourGrid.GetBlockCount(ColourType.Green)}";
+            GreenBlocksLabel.Refresh();
             BlueBlocksLabel.Text = $"{ColourGrid.GetBlockCount(ColourType.Blue)}";
+            BlueBlocksLabel.Refresh();
         }
 
         public void DrawGrid(PaintEventArgs e)
@@ -60,22 +77,72 @@ namespace MathsJourney.ColourWars
 
         public void NextTeamTurn()
         {
-            // Switch team that is to play
-            TeamsTurn++;
-
-            if (TeamsTurn > Enum.GetNames(typeof(ColourType)).Length - 1)
+            if (GameIsLive)
             {
-                TeamsTurn = 1;
+                // Check if game is finished
+                CheckGameOver();
+
+                // Switch team that is to play
+                TeamsTurn++;
+
+                if (TeamsTurn > Enum.GetNames(typeof(ColourType)).Length - 1)
+                {
+                    TeamsTurn = 1;
+                }
+
+                // Perform some checks on this team to see if a it is knocked out or has only 1 move left or cannot do any moves
+                if (ColourGrid.GetBlockCount((ColourType)TeamsTurn) <= 0)
+                {
+                    // Then this team is knocked out. Strikethrough their label to indicate this
+                    StrikeOutTeamLabels(TeamsTurn);
+
+                    // Then this team has no blocks and therefore is out
+                    NextTeamTurn();
+                }
+
+                // If it is now Red team's turn
+                if ((ColourType)TeamsTurn == ColourType.Red)
+                {
+                    if (GameIsLive) { Thread.Sleep(ComputerPlayer.ComputerPlayDelay); }
+                    RedPlayer.TakeTurn();
+                    GameField.Refresh();
+                    NextTeamTurn();
+                }
+                // If it is now Green team's turn
+                if ((ColourType)TeamsTurn == ColourType.Green)
+                {
+                    if (GameIsLive) { Thread.Sleep(ComputerPlayer.ComputerPlayDelay); }
+                    GreenPlayer.TakeTurn();
+                    GameField.Refresh();
+                    NextTeamTurn();
+                }
+                // If it is now Blue team's turn
+                if ((ColourType)TeamsTurn == ColourType.Blue)
+                {
+                    if (GameIsLive) { Thread.Sleep(ComputerPlayer.ComputerPlayDelay); }
+                    BluePlayer.TakeTurn();
+                    GameField.Refresh();
+                    NextTeamTurn();
+                }
+            }
+            
+        }
+
+        private void CheckGameOver()
+        {
+            int teamsOut = 0;
+
+            for (int i = 1; i < Enum.GetNames(typeof(ColourType)).Length; i++)
+            {
+                if (ColourGrid.GetBlockCount((ColourType)i) <= 0)
+                {
+                    teamsOut++;
+                }
             }
 
-            // Perform some checks on this team to see if a it is knocked out or has only 1 move left or cannot do any moves
-            if (ColourGrid.GetBlockCount((ColourType)TeamsTurn) <= 0)
+            if (teamsOut >= Enum.GetNames(typeof(ColourType)).Length - 2)
             {
-                // Then this team is knocked out. Strikethrough their label to indicate this
-                StrikeOutTeamLabels(TeamsTurn);
-
-                // Then this team has no blocks and therefore is out
-                NextTeamTurn();
+                GameIsLive = false;
             }
         }
 
@@ -86,26 +153,41 @@ namespace MathsJourney.ColourWars
                 case ColourType.Red:
                     var redFont = new Font(RedTeamLabel.Font, FontStyle.Strikeout);
                     RedTeamLabel.Font = redFont;
+                    RedTeamLabel.Refresh();
                     RedStrengthLabel.Text = "";
+                    RedStrengthLabel.Refresh();
                     RedBlocksLabel.Text = "";
+                    RedBlocksLabel.Refresh();
                     RedBadAgainstLabel.Text = "";
+                    RedBadAgainstLabel.Refresh();
                     RedGoodAgainstLabel.Text = "";
+                    RedGoodAgainstLabel.Refresh();
                     break;
                 case ColourType.Green:
                     var greenFont = new Font(GreenTeamLabel.Font, FontStyle.Strikeout);
                     GreenTeamLabel.Font = greenFont;
+                    GreenTeamLabel.Refresh();
                     GreenStrengthLabel.Text = "";
+                    GreenStrengthLabel.Refresh();
                     GreenBlocksLabel.Text = "";
+                    GreenBlocksLabel.Refresh();
                     GreenBadAgainstLabel.Text = "";
+                    GreenBadAgainstLabel.Refresh();
                     GreenGoodAgainstLabel.Text = "";
+                    GreenGoodAgainstLabel.Refresh();
                     break;
                 case ColourType.Blue:
                     var blueFont = new Font(BlueTeamLabel.Font, FontStyle.Strikeout);
                     BlueTeamLabel.Font = blueFont;
+                    BlueTeamLabel.Refresh();
                     BlueStrengthLabel.Text = "";
-                    BlocksLabel.Text = "";
+                    BlueStrengthLabel.Refresh();
+                    BlueBlocksLabel.Text = "";
+                    BlueBlocksLabel.Refresh();
                     BlueBadAgainstLabel.Text = "";
+                    BlueBadAgainstLabel.Refresh();
                     BlueGoodAgainstLabel.Text = "";
+                    BlueGoodAgainstLabel.Refresh();
                     break;
             }
         }
@@ -136,12 +218,6 @@ namespace MathsJourney.ColourWars
             {
                 _mouseDownEndPoint = e.Location;
             }
-        }
-
-        private void SkipTurnButton_Click(object sender, EventArgs e)
-        {
-            NextTeamTurn();
-            GameField.Refresh();
         }
 
         private void GameField_MouseUp(object sender, MouseEventArgs e)
@@ -202,9 +278,17 @@ namespace MathsJourney.ColourWars
 
             if (moveOccured)
             {
+                GameField.Refresh();
                 NextTeamTurn();
                 GameField.Refresh();
             }
         }
+        
+        private void SkipTurnButton_Click(object sender, EventArgs e)
+        {
+            NextTeamTurn();
+            GameField.Refresh();
+        }
+
     }
 }

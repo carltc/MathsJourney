@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static MathsJourney.DrawingHelper;
+using static MathsJourney.ColourWars.ColourTypeHelper;
+using static MathsJourney.ColourWars.BlockMoveHelper;
 
 namespace MathsJourney.ColourWars
 {
@@ -16,6 +18,8 @@ namespace MathsJourney.ColourWars
         /// </summary>
         public const int GridSize = 5;
 
+        public string GridName { get; set; }
+
         public ColourWars Game { get; set; }
         public Size GameFieldSize { get; set; }
 
@@ -24,11 +28,40 @@ namespace MathsJourney.ColourWars
         public int BlockWidth { get => GameFieldSize.Width / ColourGrid.GridSize; }
         public int BlockHeight { get => GameFieldSize.Height / ColourGrid.GridSize; }
 
-        public ColourGrid(ColourWars game, Size gameFieldSize)
+        public ColourGrid(string gridName, ColourWars game, Size gameFieldSize)
         {
+            GridName = gridName;
             Game = game;
             GameFieldSize = gameFieldSize;
             PopulateStartingGrid();
+        }
+
+        public ColourGrid(ColourGrid colourGrid, string gridName)
+        {
+            GridName = gridName;
+            Game = colourGrid.Game;
+            GameFieldSize = GameFieldSize;
+            ColourBlocks = CreateColourBlocksCopy(colourGrid.ColourBlocks);
+        }
+
+        public ColourBlock this[int i, int j]
+        {
+            get { return ColourBlocks[i, j]; }
+        }
+
+        private ColourBlock[,] CreateColourBlocksCopy(ColourBlock[,] colourBlocks)
+        {
+            var newColourBlocks = new ColourBlock[GridSize, GridSize];
+
+            for(int i = 0; i < GridSize; i++)
+            {
+                for (int j = 0; j < GridSize; j++)
+                {
+                    newColourBlocks[i, j] = (ColourBlock)colourBlocks[i, j].Clone(); // new ColourBlock(colourBlocks[i, j], this);
+                }
+            }
+
+            return newColourBlocks;
         }
 
         public void PopulateStartingGrid()
@@ -90,6 +123,13 @@ namespace MathsJourney.ColourWars
             return ColourBlocks[i, j];
         }
 
+        public bool MoveBlock(PlayerMove playerMove)
+        {
+            var attackerColourBlock = ColourBlocks[playerMove.I, playerMove.J];
+            var blockMove = playerMove.BlockMove;
+            return MoveBlock(attackerColourBlock, blockMove);
+        }
+
         /// <summary>
         /// This is a move where you take you block stack and move it onto a neighbouring stack (if possible)
         /// </summary>
@@ -100,30 +140,18 @@ namespace MathsJourney.ColourWars
         {
             // Get the point of the block that wants to be overwritten
             Point oldPoint = new Point(attackerColourBlock.I, attackerColourBlock.J);
-            Point newPoint;
-            switch (blockMove)
+            Point? newPoint = GetNewPoint(attackerColourBlock, blockMove);
+
+            if (!newPoint.HasValue)
             {
-                case BlockMove.Up:
-                    newPoint = new Point(oldPoint.X, oldPoint.Y - 1);
-                    break;
-                case BlockMove.Down:
-                    newPoint = new Point(oldPoint.X, oldPoint.Y + 1);
-                    break;
-                case BlockMove.Left:
-                    newPoint = new Point(oldPoint.X - 1, oldPoint.Y);
-                    break;
-                case BlockMove.Right:
-                    newPoint = new Point(oldPoint.X + 1, oldPoint.Y);
-                    break;
-                default:
-                    // A new blockmove which has not been implented so therefore return
-                    return false;
+                // Then a point was not found so return
+                return false;
             }
 
-            if (ValidMove(attackerColourBlock, newPoint))
+            if (ValidMove(attackerColourBlock, blockMove))
             {
                 bool attackMove = false;
-                var defenderColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
+                var defenderColourBlock = ColourBlocks[newPoint.Value.X, newPoint.Value.Y];
 
                 // Check if this was a move of the same colour overwriting, and if so then increment the count of this block
                 if (defenderColourBlock.ColourType == attackerColourBlock.ColourType)
@@ -140,10 +168,10 @@ namespace MathsJourney.ColourWars
                 }
 
                 // Set the new location with the colour block
-                ColourBlocks[newPoint.X, newPoint.Y] = attackerColourBlock;
+                ColourBlocks[newPoint.Value.X, newPoint.Value.Y] = attackerColourBlock;
                 // Set the location of the new point
-                attackerColourBlock.I = newPoint.X;
-                attackerColourBlock.J = newPoint.Y;
+                attackerColourBlock.I = newPoint.Value.X;
+                attackerColourBlock.J = newPoint.Value.Y;
 
                 // Set the old location as blank
                 var newBlock = new ColourBlock(this, attackerColourBlock.ColourType, oldPoint.X, oldPoint.Y);
@@ -168,6 +196,12 @@ namespace MathsJourney.ColourWars
                 
             return false;
 
+        }
+
+        public bool AddToBlock(PlayerMove playerMove)
+        {
+            var colourBlock = ColourBlocks[playerMove.I, playerMove.J];
+            return AddToBlock(colourBlock);
         }
 
         /// <summary>
@@ -354,8 +388,16 @@ namespace MathsJourney.ColourWars
             return blocksInSqaure;
         }
 
-        public bool ValidMove(ColourBlock attackerColourBlock, Point newPoint)
+        public bool ValidMove(ColourBlock attackerColourBlock, BlockMove blockMove)
         {
+            Point? newPoint = GetNewPoint(attackerColourBlock, blockMove);
+
+            if (!newPoint.HasValue)
+            {
+                // Then a point was not found so return
+                return false;
+            }
+
             // Check if colourblock is a blank
             if (attackerColourBlock.ColourType == ColourType.Blank)
             {
@@ -363,12 +405,12 @@ namespace MathsJourney.ColourWars
             }
 
             // Check if move is within bounds of the play area
-            if (newPoint.X < 0 || newPoint.X >= GridSize || newPoint.Y < 0 || newPoint.Y >= GridSize)
+            if (newPoint.Value.X < 0 || newPoint.Value.X >= GridSize || newPoint.Value.Y < 0 || newPoint.Value.Y >= GridSize)
             {
                 return false;
             }
 
-            var defenderColourBlock = ColourBlocks[newPoint.X, newPoint.Y];
+            var defenderColourBlock = ColourBlocks[newPoint.Value.X, newPoint.Value.Y];
 
             // Check if the block to be overwritten can be overwritten by the count of this block
             var defenderHealth = defenderColourBlock.Count;
@@ -388,30 +430,11 @@ namespace MathsJourney.ColourWars
 
         public int GetDefenderHealth(ColourType attacker, ColourType defender, int initialHealth)
         {
-            // Upgrade defender health if weak colur attacking
-            switch (attacker)
+            // Upgrade defender health if weak colour attacking
+            var weakColourType = GetWeakColourType(attacker);
+            if (defender == weakColourType)
             {
-                case ColourType.Red:
-                    // RED is worse against BLUE
-                    if (defender == ColourType.Blue)
-                    {
-                        initialHealth *= 2;
-                    }
-                    break;
-                case ColourType.Green:
-                    // GREEN is worse against RED
-                    if (defender == ColourType.Red)
-                    {
-                        initialHealth *= 2;
-                    }
-                    break;
-                case ColourType.Blue:
-                    // BLUE is worse against GREEN
-                    if (defender == ColourType.Green)
-                    {
-                        initialHealth *= 2;
-                    }
-                    break;
+                initialHealth *= 2;
             }
 
             return initialHealth;
@@ -451,6 +474,39 @@ namespace MathsJourney.ColourWars
             }
 
             return strength;
+        }
+
+        public List<PlayerMove> GetPossibleMoves(ColourType colourType)
+        {
+            var playerMoves = new List<PlayerMove>();
+
+            for (int i = 0; i < GridSize; i++)
+            {
+                for(int j = 0; j < GridSize; j++)
+                {
+                    var colourBlock = ColourBlocks[i, j];
+
+                    // Check if this colourBlock is the right type
+                    if (colourBlock.ColourType != colourType)
+                    {
+                        // Then this is not a valid move so skip this
+                        continue;
+                    }
+
+                    // Check each direction to see if it is a valid move and if so create a player move for it
+                    for(int m = 0; m < Enum.GetNames(typeof(BlockMove)).Length; m++)
+                    {
+                        if (ValidMove(colourBlock, (BlockMove)m))
+                        {
+                            var playerMove = new PlayerMove(this, colourType, colourBlock, (BlockMove)m);
+                            playerMoves.Add(playerMove);
+                        }
+                    }
+
+                }
+            }
+
+            return playerMoves;
         }
     }
 }

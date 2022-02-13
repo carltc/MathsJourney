@@ -1,11 +1,13 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using static MathsJourney.DrawingHelper;
 
 namespace MathsJourney.ColourWars
 {
-    public class ColourBlock
+    public class ColourBlock : ICloneable
     {
+        public string BlockName { get; set; }
         private ColourGrid _parentGrid { get; set; }
         public ColourType ColourType { get; set; }
 
@@ -61,10 +63,37 @@ namespace MathsJourney.ColourWars
 
         public ColourBlock(ColourGrid parentGrid, ColourType colourType, int x, int y)
         {
+            BlockName = "OriginalBlock";
             _parentGrid = parentGrid;
             ColourType = colourType;
             I = x;
             J = y;
+        }
+
+        public ColourBlock(string blockName)
+        {
+            BlockName = blockName;
+        }
+
+        //public ColourBlock(ColourBlock colourBlock, ColourGrid parentGrid)
+        //{
+        //    _parentGrid = parentGrid; 
+        //    ColourType = colourBlock.ColourType;
+        //    I = colourBlock.I;
+        //    J = colourBlock.J;
+        //    Count = new int[] { colourBlock.Count }[0];
+        //}
+
+        public object Clone()
+        {
+            return new ColourBlock("ClonedBlock")
+            {
+                _parentGrid = this._parentGrid,
+                ColourType = this.ColourType,
+                I = this.I,
+                J = this.J,
+                Count = this.Count
+            };
         }
 
         public void DrawBlock(PaintEventArgs e)

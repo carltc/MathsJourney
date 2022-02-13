@@ -80,6 +80,8 @@
     </Compile>
     <Compile Include="ColourWars\ColourGrid.cs" />
     <Compile Include="ColourWars\ColourType.cs" />
+    <Compile Include="ColourWars\ComputerPlayer.cs" />
+    <Compile Include="ColourWars\PlayerMove.cs" />
     <Compile Include="DrawingHelper.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
