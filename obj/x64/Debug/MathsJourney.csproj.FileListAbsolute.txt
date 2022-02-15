@@ -12,3 +12,4 @@ C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.csproj.Genera
 C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.csproj.CoreCompileInputs.cache
 C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.exe
 C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.pdb
+C:\Users\Carl\source\repos\MathsJourney\obj\x64\Debug\MathsJourney.csprojAssemblyReference.cache

@@ -227,10 +227,10 @@ namespace MathsJourney.ColourWars
 
             bool noMoreSquares = false;
 
-            while(!noMoreSquares)
-            {
-                blocksInSqaure = new List<ColourBlock>();
+            blocksInSqaure = new List<ColourBlock>();
 
+            while (!noMoreSquares || squareSize < 2)
+            {
                 // Start by incrementing the square size to check
                 squareSize++;
                 noMoreSquares = true;
@@ -285,108 +285,108 @@ namespace MathsJourney.ColourWars
                 }
             }
 
-            // Finally just reverse the check to see if a bigger square can be found by searching with this square in the opposite direction
-            if (blocksInSqaure.Count > 0)
-            {
-                bool validSquare = true;
+            //// Finally just reverse the check to see if a bigger square can be found by searching with this square in the opposite direction
+            //if (blocksInSqaure.Count > 0)
+            //{
+            //    bool validSquare = true;
 
-                while (validSquare)
-                {
-                    List<ColourBlock> blocksInSquareCheck = new List<ColourBlock>();
+            //    while (validSquare)
+            //    {
+            //        List<ColourBlock> blocksInSquareCheck = new List<ColourBlock>();
 
-                    for (int i = 0; i < squareSize; i++)
-                    {
-                        int iIndex = colourBlock.I + (i * -xAdd[bestDir]);
-                        int jIndex = colourBlock.J + -yAdd[bestDir];
+            //        for (int i = 0; i < squareSize; i++)
+            //        {
+            //            int iIndex = colourBlock.I + (i * -xAdd[bestDir]);
+            //            int jIndex = colourBlock.J + -yAdd[bestDir];
 
-                        // Check if these indices are within limits
-                        if (iIndex >= 0 && iIndex < GridSize && jIndex >= 0 && jIndex < GridSize)
-                        {
-                            // Get this block
-                            var checkBlock = ColourBlocks[iIndex, jIndex];
-                            //Check if block is the same colour as starting block
-                            if (checkBlock.ColourType == colourBlock.ColourType)
-                            {
-                                blocksInSquareCheck.Add(checkBlock);
-                            }
-                            else
-                            {
-                                validSquare = false;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            validSquare = false;
-                            break;
-                        }
-                    }
+            //            // Check if these indices are within limits
+            //            if (iIndex >= 0 && iIndex < GridSize && jIndex >= 0 && jIndex < GridSize)
+            //            {
+            //                // Get this block
+            //                var checkBlock = ColourBlocks[iIndex, jIndex];
+            //                //Check if block is the same colour as starting block
+            //                if (checkBlock.ColourType == colourBlock.ColourType)
+            //                {
+            //                    blocksInSquareCheck.Add(checkBlock);
+            //                }
+            //                else
+            //                {
+            //                    validSquare = false;
+            //                    break;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                validSquare = false;
+            //                break;
+            //            }
+            //        }
                     
-                    if(validSquare)
-                    {
-                        for (int j = 0; j < squareSize; j++)
-                        {
-                            int iIndex = colourBlock.I + -xAdd[bestDir];
-                            int jIndex = colourBlock.J + (j * -yAdd[bestDir]);
+            //        if(validSquare)
+            //        {
+            //            for (int j = 0; j < squareSize; j++)
+            //            {
+            //                int iIndex = colourBlock.I + -xAdd[bestDir];
+            //                int jIndex = colourBlock.J + (j * -yAdd[bestDir]);
 
-                            // Check if these indices are within limits
-                            if (iIndex >= 0 && iIndex < GridSize && jIndex >= 0 && jIndex < GridSize)
-                            {
-                                // Get this block
-                                var checkBlock = ColourBlocks[iIndex, jIndex];
-                                //Check if block is the same colour as starting block
-                                if (checkBlock.ColourType == colourBlock.ColourType)
-                                {
-                                    blocksInSquareCheck.Add(checkBlock);
-                                }
-                                else
-                                {
-                                    validSquare = false;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                validSquare = false;
-                                break;
-                            }
-                        }
-                    }
+            //                // Check if these indices are within limits
+            //                if (iIndex >= 0 && iIndex < GridSize && jIndex >= 0 && jIndex < GridSize)
+            //                {
+            //                    // Get this block
+            //                    var checkBlock = ColourBlocks[iIndex, jIndex];
+            //                    //Check if block is the same colour as starting block
+            //                    if (checkBlock.ColourType == colourBlock.ColourType)
+            //                    {
+            //                        blocksInSquareCheck.Add(checkBlock);
+            //                    }
+            //                    else
+            //                    {
+            //                        validSquare = false;
+            //                        break;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    validSquare = false;
+            //                    break;
+            //                }
+            //            }
+            //        }
 
-                    if (validSquare)
-                    {
-                        int iIndex = colourBlock.I + -xAdd[bestDir];
-                        int jIndex = colourBlock.J + -yAdd[bestDir];
+            //        if (validSquare)
+            //        {
+            //            int iIndex = colourBlock.I + -xAdd[bestDir];
+            //            int jIndex = colourBlock.J + -yAdd[bestDir];
 
-                        // Check if these indices are within limits
-                        if (iIndex >= 0 && iIndex < GridSize && jIndex >= 0 && jIndex < GridSize)
-                        {
-                            // Get this block
-                            var checkBlock = ColourBlocks[iIndex, jIndex];
-                            //Check if block is the same colour as starting block
-                            if (checkBlock.ColourType == colourBlock.ColourType)
-                            {
-                                blocksInSquareCheck.Add(checkBlock);
-                            }
-                            else
-                            {
-                                validSquare = false;
-                            }
-                        }
-                        else
-                        {
-                            validSquare = false;
-                        }
-                    }
+            //            // Check if these indices are within limits
+            //            if (iIndex >= 0 && iIndex < GridSize && jIndex >= 0 && jIndex < GridSize)
+            //            {
+            //                // Get this block
+            //                var checkBlock = ColourBlocks[iIndex, jIndex];
+            //                //Check if block is the same colour as starting block
+            //                if (checkBlock.ColourType == colourBlock.ColourType)
+            //                {
+            //                    blocksInSquareCheck.Add(checkBlock);
+            //                }
+            //                else
+            //                {
+            //                    validSquare = false;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                validSquare = false;
+            //            }
+            //        }
 
-                    // If this square is valid then set it as the largest square found
-                    if (validSquare)
-                    {
-                        blocksInSqaure.AddRange(blocksInSquareCheck);
-                    }
-                }
+            //        // If this square is valid then set it as the largest square found
+            //        if (validSquare)
+            //        {
+            //            blocksInSqaure.AddRange(blocksInSquareCheck);
+            //        }
+            //    }
 
-            }
+            //}
 
             return blocksInSqaure;
         }

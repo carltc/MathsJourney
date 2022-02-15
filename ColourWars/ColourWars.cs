@@ -20,15 +20,15 @@ namespace MathsJourney.ColourWars
 
         private int MaxMatchMoves = 0;
 
-        public ComputerPlayer Winner { get; set; }
+        public Player Winner { get; set; } = null;
 
-        public ComputerPlayer RedPlayer { get; set; }
-        public ComputerPlayer GreenPlayer { get; set; }
-        public ComputerPlayer BluePlayer { get; set; }
+        public Player RedPlayer { get; set; }
+        public Player GreenPlayer { get; set; }
+        public Player BluePlayer { get; set; }
 
-        public List<ComputerPlayer> Players { get; set; }
+        public List<Player> Players { get; set; }
 
-        public ColourWars(ComputerPlayer redPlayer, ComputerPlayer greenPlayer, ComputerPlayer bluePlayer, int MatchMoves = 0)
+        public ColourWars(Player redPlayer, Player greenPlayer, Player bluePlayer, int MatchMoves = 0)
         {
             InitializeComponent();
             ColourGrid = new ColourGrid("MainGrid", this, GameField.Size);
@@ -43,7 +43,7 @@ namespace MathsJourney.ColourWars
             BluePlayer = bluePlayer; // new ComputerPlayer(blueScoreWeightings, ColourGrid, ColourType.Blue);
             BluePlayer.ColourGrid = ColourGrid;
 
-            Players = new List<ComputerPlayer>() { RedPlayer, GreenPlayer, BluePlayer };
+            Players = new List<Player>() { RedPlayer, GreenPlayer, BluePlayer };
 
             // Set the maximum match moves
             MaxMatchMoves = MatchMoves;
@@ -127,26 +127,26 @@ namespace MathsJourney.ColourWars
                 }
 
                 // If it is now Red team's turn
-                if ((ColourType)TeamsTurn == ColourType.Red)
+                if ((ColourType)TeamsTurn == ColourType.Red && RedPlayer is ComputerPlayer)
                 {
                     if (GameIsLive) { Thread.Sleep(ComputerPlayer.ComputerPlayDelay); }
-                    RedPlayer.TakeTurn();
+                    ((ComputerPlayer)RedPlayer).TakeTurn();
                     GameField.Refresh();
                     NextTeamTurn();
                 }
                 // If it is now Green team's turn
-                if ((ColourType)TeamsTurn == ColourType.Green)
+                if ((ColourType)TeamsTurn == ColourType.Green && GreenPlayer is ComputerPlayer)
                 {
                     if (GameIsLive) { Thread.Sleep(ComputerPlayer.ComputerPlayDelay); }
-                    GreenPlayer.TakeTurn();
+                    ((ComputerPlayer)GreenPlayer).TakeTurn();
                     GameField.Refresh();
                     NextTeamTurn();
                 }
                 // If it is now Blue team's turn
-                if ((ColourType)TeamsTurn == ColourType.Blue)
+                if ((ColourType)TeamsTurn == ColourType.Blue && BluePlayer is ComputerPlayer)
                 {
                     if (GameIsLive) { Thread.Sleep(ComputerPlayer.ComputerPlayDelay); }
-                    BluePlayer.TakeTurn();
+                    ((ComputerPlayer)BluePlayer).TakeTurn();
                     GameField.Refresh();
                     NextTeamTurn();
                 }
@@ -161,24 +161,26 @@ namespace MathsJourney.ColourWars
             {
                 if (MovesMade >= MaxMatchMoves)
                 {
+                    EndMatch(null);
+
                     // Player with highest strength - block ratio wins
-                    if (RedPlayer.Score > GreenPlayer.Score && RedPlayer.Score > BluePlayer.Score)
-                    {
-                        EndMatch(RedPlayer);
-                    }
-                    else if (GreenPlayer.Score > BluePlayer.Score)
-                    {
-                        EndMatch(GreenPlayer);
-                    }
-                    else
-                    {
-                        EndMatch(BluePlayer);
-                    }
+                    //if (RedPlayer.Score > GreenPlayer.Score && RedPlayer.Score > BluePlayer.Score)
+                    //{
+                    //    EndMatch(RedPlayer);
+                    //}
+                    //else if (GreenPlayer.Score > BluePlayer.Score)
+                    //{
+                    //    EndMatch(GreenPlayer);
+                    //}
+                    //else
+                    //{
+                    //    EndMatch(BluePlayer);
+                    //}
                 }
             }
 
             int teamsOut = 0;
-            var remainingTeams = new List<ComputerPlayer>();
+            var remainingTeams = new List<Player>();
 
             foreach(var player in Players)
             {
@@ -198,12 +200,15 @@ namespace MathsJourney.ColourWars
             }
         }
 
-        private void EndMatch(ComputerPlayer winner)
+        private void EndMatch(Player winner)
         {
             GameIsLive = false;
-            Winner = winner;
-            Winner.Wins++;
-            winner.TotalScore += winner.Score;
+            if (winner != null)
+            {
+                Winner = winner;
+                Winner.Wins++;
+                winner.TotalScore += winner.Score;
+            }
         }
 
         private void StrikeOutTeamLabels(int teamsTurn)

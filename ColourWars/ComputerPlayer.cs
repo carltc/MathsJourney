@@ -6,41 +6,18 @@ using System.Threading.Tasks;
 
 namespace MathsJourney.ColourWars
 {
-    public class ComputerPlayer
+    public class ComputerPlayer : Player
     {
         public const int ComputerPlayDelay = 0;
-
-        public ColourType ColourType { get; set; }
-
-        public ColourGrid ColourGrid { get; set; }
+        public static Random random = new Random();
 
         private PlayerMove _previousMove { get; set; }
 
         public MoveScoreWeightings MoveScoreWeightings { get; set; }
 
-        public int Strength
-        {
-            get { return ColourGrid.GetStrength(ColourType); }
-        }
-        
-        public int BlockCount
-        {
-            get { return ColourGrid.GetBlockCount(ColourType); }
-        }
-        
-        public int Score
-        {
-            get { return Strength + BlockCount; }
-        }
-
-        public int TotalScore { get; set; }
-
-        public int Wins { get; set; } = 0;
-
-        public ComputerPlayer(MoveScoreWeightings moveScoreWeightings, ColourType colourType)
+        public ComputerPlayer(MoveScoreWeightings moveScoreWeightings, ColourType colourType) : base(colourType)
         {
             MoveScoreWeightings = moveScoreWeightings;
-            ColourType = colourType;
         }
 
         public bool TakeTurn()
@@ -52,36 +29,55 @@ namespace MathsJourney.ColourWars
                 //.OrderByDescending(pm => pm.SurroundingEnemyBlocks) // Number of enemy blocks around so that moves near enemies are prioritised
                 //.OrderByDescending(pm => pm.PredictedStrength) // Block strength so that players try to make moves which will increase their strength the most
                 //.OrderByDescending(pm => pm.PredictedBlockCount) // Block count so that players always try to take a new block (increase their block count)
-                .OrderByDescending(pm => pm.MoveScore(MoveScoreWeightings))
+                //.OrderByDescending(pm => pm.CalculateMoveScore(MoveScoreWeightings, this))
                 .ToList();
+
+            foreach(var move in possibleMoves)
+            {
+                move.MoveScore = move.CalculateMoveScore(MoveScoreWeightings, this);
+            }
+
+            possibleMoves = possibleMoves.OrderByDescending(pm => pm.MoveScore).ToList();
 
             ColourGrid.Game.RefreshGameField();
 
             // See if the previous move exists in the list of possible moves (and if so move it to the end)
-            if (_previousMove != null)
-            {
-                List<int> sameMoveIndices = new List<int>(); ;
-                for (int i = 0; i < possibleMoves.Count(); i++)
-                {
-                    if (((_previousMove.I == possibleMoves[i].I  && _previousMove.J == possibleMoves[i].J)
-                        || (_previousMove.NewI == possibleMoves[i].NewI  && _previousMove.NewJ == possibleMoves[i].NewJ))
-                        && _previousMove.BlockMove == possibleMoves[i].BlockMove)
-                    {
-                        sameMoveIndices.Add(i);
-                    }
-                }
+            //if (_previousMove != null)
+            //{
+            //    List<int> sameMoveIndices = new List<int>(); ;
+            //    for (int i = 0; i < possibleMoves.Count(); i++)
+            //    {
+            //        if ((
+            //            (_previousMove.I == possibleMoves[i].I  && _previousMove.J == possibleMoves[i].J) ||
+            //            (_previousMove.NewI == possibleMoves[i].NewI  && _previousMove.NewJ == possibleMoves[i].NewJ) ||
+            //            (_previousMove.NewI == possibleMoves[i].I  && _previousMove.NewJ == possibleMoves[i].J) ||
+            //            (_previousMove.I == possibleMoves[i].NewI  && _previousMove.J == possibleMoves[i].NewJ) ||
+            //            (_previousMove.BlockMove == possibleMoves[i].BlockMove)
+            //            ))
+            //            //&& _previousMove.BlockMove == possibleMoves[i].BlockMove)
+            //        {
+            //            sameMoveIndices.Add(i);
+            //        }
+            //    }
 
-                foreach(var sameMoveIndex in sameMoveIndices.OrderByDescending(i => i))
-                {
-                    var sameMove = possibleMoves[sameMoveIndex];
-                    possibleMoves.Remove(sameMove);
-                    possibleMoves.Add(sameMove);
-                }
-            }
+            //    foreach(var sameMoveIndex in sameMoveIndices.OrderByDescending(i => i))
+            //    {
+            //        var sameMove = possibleMoves[sameMoveIndex];
+            //        possibleMoves.Remove(sameMove);
+            //        possibleMoves.Add(sameMove);
+            //    }
+            //}
 
             // Get the move that produces the highest strength
             foreach (var move in possibleMoves)
             {
+                // Check if randomly this move shouldn't be picked
+                int chance = random.Next(100);
+                if (chance < MoveScoreWeightings.chancePickingRandomMove)
+                {
+                    continue;
+                }
+
                 switch(move.BlockMove)
                 {
                     case BlockMove.Up:

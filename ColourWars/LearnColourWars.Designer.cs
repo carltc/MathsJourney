@@ -37,6 +37,8 @@ namespace MathsJourney.ColourWars
             this.GreenPlayerLabel = new System.Windows.Forms.Label();
             this.GreenPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.ResultsPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.BestResultGrid = new System.Windows.Forms.PropertyGrid();
+            this.MostWinsLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // BeginLearningButton
@@ -105,16 +107,36 @@ namespace MathsJourney.ColourWars
             // 
             // ResultsPropertyGrid
             // 
-            this.ResultsPropertyGrid.Location = new System.Drawing.Point(854, 12);
+            this.ResultsPropertyGrid.Location = new System.Drawing.Point(1143, 12);
             this.ResultsPropertyGrid.Name = "ResultsPropertyGrid";
             this.ResultsPropertyGrid.Size = new System.Drawing.Size(319, 426);
             this.ResultsPropertyGrid.TabIndex = 7;
+            // 
+            // BestResultGrid
+            // 
+            this.BestResultGrid.Location = new System.Drawing.Point(823, 46);
+            this.BestResultGrid.Name = "BestResultGrid";
+            this.BestResultGrid.Size = new System.Drawing.Size(314, 392);
+            this.BestResultGrid.TabIndex = 8;
+            // 
+            // MostWinsLabel
+            // 
+            this.MostWinsLabel.AutoSize = true;
+            this.MostWinsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MostWinsLabel.ForeColor = System.Drawing.Color.Black;
+            this.MostWinsLabel.Location = new System.Drawing.Point(817, 12);
+            this.MostWinsLabel.Name = "MostWinsLabel";
+            this.MostWinsLabel.Size = new System.Drawing.Size(166, 31);
+            this.MostWinsLabel.TabIndex = 9;
+            this.MostWinsLabel.Text = "Most Wins: ";
             // 
             // LearnColourWars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1185, 450);
+            this.ClientSize = new System.Drawing.Size(1474, 450);
+            this.Controls.Add(this.MostWinsLabel);
+            this.Controls.Add(this.BestResultGrid);
             this.Controls.Add(this.ResultsPropertyGrid);
             this.Controls.Add(this.GreenPlayerLabel);
             this.Controls.Add(this.GreenPropertyGrid);
@@ -140,5 +162,7 @@ namespace MathsJourney.ColourWars
         private System.Windows.Forms.Label GreenPlayerLabel;
         private System.Windows.Forms.PropertyGrid GreenPropertyGrid;
         private System.Windows.Forms.PropertyGrid ResultsPropertyGrid;
+        private System.Windows.Forms.PropertyGrid BestResultGrid;
+        private System.Windows.Forms.Label MostWinsLabel;
     }
 }

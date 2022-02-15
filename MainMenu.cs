@@ -129,22 +129,51 @@ namespace MathsJourney
             ////////////////////////////
 
             // A good move score weighting
-            var moveScoreWeighting = new MoveScoreWeightings()
+            var moveScoreWeighting1 = new MoveScoreWeightings()
             {
-                thisCountWeighting = 13,
-                otherCountWeighting = 27,
-                predictedStrengthWeighting = -61,
-                predictedBlockCountWeighting = 0,
-                surroundingEnemyBlockWeighting = 38,
-                attackWeighting = 134,
-                attackWeakWeighting = 23,
-                attackStrongWeighting = -126
+                thisCountWeighting = -6,
+                otherCountWeighting = 29,
+                predictedStrengthWeighting = 26,
+                predictedBlockCountWeighting = 28,
+                surroundingEnemyBlockWeighting = 68,
+                attackWeighting = 183,
+                attackWeakWeighting = 495,
+                attackStrongWeighting = 244,
+                moveTowardEnemyWeighting = 497,
+                chancePickingRandomMove = -23
             };
-            
+            var moveScoreWeighting2 = new MoveScoreWeightings()
+            {
+                thisCountWeighting = 0,
+                otherCountWeighting = -26,
+                predictedStrengthWeighting = 13,
+                predictedBlockCountWeighting = -23,
+                surroundingEnemyBlockWeighting = 106,
+                attackWeighting = 193,
+                attackWeakWeighting = 471,
+                attackStrongWeighting = 304,
+                moveTowardEnemyWeighting = 525,
+                chancePickingRandomMove = 44
+            };
+            var moveScoreWeighting3 = new MoveScoreWeightings()
+            {
+                thisCountWeighting = 1,
+                otherCountWeighting = 2,
+                predictedStrengthWeighting = 5,
+                predictedBlockCountWeighting = 8,
+                surroundingEnemyBlockWeighting = 100,
+                attackWeighting = 200,
+                attackWeakWeighting = 500,
+                attackStrongWeighting = 300,
+                moveTowardEnemyWeighting = 500,
+                chancePickingRandomMove = 10
+            };
+
             // Create new form window
-            var redPlayer = new ComputerPlayer(moveScoreWeighting, ColourType.Red);
-            var greenPlayer = new ComputerPlayer(moveScoreWeighting, ColourType.Green);
-            var bluePlayer = new ComputerPlayer(moveScoreWeighting, ColourType.Blue);
+            var redPlayer = new Player(ColourType.Red);
+            //var redPlayer = new ComputerPlayer(moveScoreWeighting1, ColourType.Red);
+            var greenPlayer = new ComputerPlayer(moveScoreWeighting2, ColourType.Green);
+            var bluePlayer = new ComputerPlayer(moveScoreWeighting1, ColourType.Blue);
 
             var colourWarsGame = new ColourWars.ColourWars(redPlayer, greenPlayer, bluePlayer, 100);
 

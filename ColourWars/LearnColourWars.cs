@@ -53,64 +53,89 @@ namespace MathsJourney.ColourWars
         private void BeginLearningButton_Click(object sender, EventArgs e)
         {
             // Play 100 games
-            for(int i = 0; i < 100; i++)
+            for (int i = 0; i < 100; i++)
             {
-                PlayGame();
-            }
+                ComputerPlayer bestPlayer = null;
+                LearningResult learningResult = null;
 
-            // Save the score of the best player
-            LearningResult learningResult;
-            ComputerPlayer bestPlayer;
-            if (RedPlayer.Wins > GreenPlayer.Wins && RedPlayer.Wins > BluePlayer.Wins)
-            {
-                bestPlayer = RedPlayer;
-            }
-            else if (GreenPlayer.Wins > BluePlayer.Wins)
-            {
-                bestPlayer = GreenPlayer;
-            }
-            else
-            {
-                bestPlayer = BluePlayer;
-            }
-            learningResult = new LearningResult()
-            {
-                Score = bestPlayer.TotalScore,
-                MoveScoreWeightings = bestPlayer.MoveScoreWeightings
-            };
-            LearningResults.BestLearningResults.Add(learningResult);
-
-            bool firstPlayer = true;
-            foreach(var player in Players)
-            {
-                if (player != bestPlayer)
+                if (PlayGame())
                 {
-                    if (firstPlayer)
+                    // There was a winner. Find out who
+                    if (RedPlayer.Wins > GreenPlayer.Wins && RedPlayer.Wins > BluePlayer.Wins)
                     {
-                        player.MoveScoreWeightings = MoveScoreWeightings.MutateMoveScoreWeighting(bestPlayer.MoveScoreWeightings);
-                        firstPlayer = false;
+                        bestPlayer = RedPlayer;
+                    }
+                    else if (GreenPlayer.Wins > BluePlayer.Wins)
+                    {
+                        bestPlayer = GreenPlayer;
                     }
                     else
                     {
-                        if (LearningResults.BestLearningResults.Count >= 2)
-                        {
-                            var bestMoveScoreWeighting = LearningResults.BestLearningResults.OrderByDescending(msw => msw.Score).Select(msw => msw.MoveScoreWeightings).ToList()[0];
-                            var secondBestMoveScoreWeighting = LearningResults.BestLearningResults.OrderByDescending(msw => msw.Score).Select(msw => msw.MoveScoreWeightings).ToList()[1];
+                        bestPlayer = BluePlayer;
+                    }
 
-                            player.MoveScoreWeightings = MoveScoreWeightings.BreedMoveScoreWeighting(bestMoveScoreWeighting, secondBestMoveScoreWeighting);
+                    // Save the score of the best player
+                    learningResult = new LearningResult()
+                    {
+                        Score = bestPlayer.Wins,
+                        MoveScoreWeightings = bestPlayer.MoveScoreWeightings
+                    };
+                    LearningResults.BestLearningResults.Add(learningResult);
+                }
+
+                foreach (var player in Players)
+                {
+                    if (player != bestPlayer)
+                    {
+                        if (bestPlayer != null && LearningResults.BestLearningResults.Count >= 2)
+                        {
+                            if (i % 2 == 0)
+                            {
+                                var bestMoveScoreWeighting = LearningResults.BestLearningResults.OrderByDescending(msw => msw.Score).Select(msw => msw.MoveScoreWeightings).ToList()[0];
+                                var secondBestMoveScoreWeighting = LearningResults.BestLearningResults.OrderByDescending(msw => msw.Score).Select(msw => msw.MoveScoreWeightings).ToList()[1];
+
+                                player.MoveScoreWeightings = MoveScoreWeightings.BreedMoveScoreWeighting(bestMoveScoreWeighting, secondBestMoveScoreWeighting);
+                            }
+                            else
+                            {
+                                player.MoveScoreWeightings = MoveScoreWeightings.MutateMoveScoreWeighting(bestPlayer.MoveScoreWeightings);
+                            }
                         }
                         else
                         {
-                            player.MoveScoreWeightings = MoveScoreWeightings.MutateMoveScoreWeighting(bestPlayer.MoveScoreWeightings);
+                            var startingScoreWeighting = new MoveScoreWeightings()
+                            {
+                                thisCountWeighting = 1,
+                                otherCountWeighting = 2,
+                                predictedStrengthWeighting = 5,
+                                predictedBlockCountWeighting = 8,
+                                surroundingEnemyBlockWeighting = 100,
+                                attackWeighting = 200,
+                                attackWeakWeighting = 500,
+                                attackStrongWeighting = 300,
+                                moveTowardEnemyWeighting = 500,
+                                chancePickingRandomMove = 10
+                            };
+
+                            player.MoveScoreWeightings = MoveScoreWeightings.MutateMoveScoreWeighting(startingScoreWeighting);
                         }
+                        player.Wins = 0;
+                        player.TotalScore = 0;
+                    }
+                    else
+                    {
+
                     }
                 }
-                player.Wins = 0;
-                player.TotalScore = 0;
             }
+
+            // At the end populate the grid with the best scoring weighting
+            var bestResult = LearningResults.BestLearningResults.OrderByDescending(lr => lr.Score).FirstOrDefault();
+            BestResultGrid.SelectedObject = bestResult.MoveScoreWeightings;
+            MostWinsLabel.Text = $"Most Wins: {bestResult.Score}";
         }
 
-        private void PlayGame()
+        private bool PlayGame()
         {
             ColourWarsGame = new ColourWars(RedPlayer, GreenPlayer, BluePlayer, 100);
 
@@ -119,6 +144,14 @@ namespace MathsJourney.ColourWars
             //ColourWarsGame.Close();
 
             UpdatePlayerWinsLabels();
+
+            // Check if anyone has won
+            if (ColourWarsGame.Winner != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

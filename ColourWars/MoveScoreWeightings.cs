@@ -21,6 +21,8 @@ namespace MathsJourney.ColourWars
         public double attackWeighting { get; set; } = 1.0;
         public double attackWeakWeighting { get; set; } = 1.0;
         public double attackStrongWeighting { get; set; } = 1.0;
+        public double moveTowardEnemyWeighting { get; set; } = 1.0;
+        public double chancePickingRandomMove { get; set; } = 1.0;
 
         public MoveScoreWeightings()
         {
@@ -32,6 +34,8 @@ namespace MathsJourney.ColourWars
             attackWeighting = random.Next(_initialiseMin, _initialiseMax);
             attackWeakWeighting = random.Next(_initialiseMin, _initialiseMax);
             attackStrongWeighting = random.Next(_initialiseMin, _initialiseMax);
+            moveTowardEnemyWeighting = random.Next(_initialiseMin, _initialiseMax);
+            chancePickingRandomMove = random.Next(_initialiseMin, _initialiseMax);
         }
 
         public static MoveScoreWeightings MutateMoveScoreWeighting(MoveScoreWeightings moveScoreWeightings)
@@ -45,7 +49,9 @@ namespace MathsJourney.ColourWars
                 surroundingEnemyBlockWeighting = moveScoreWeightings.surroundingEnemyBlockWeighting + random.Next((int)(_initialiseMin * _mutateRatio), (int)(_initialiseMax * _mutateRatio)),
                 attackWeighting = moveScoreWeightings.attackWeighting + random.Next((int)(_initialiseMin * _mutateRatio), (int)(_initialiseMax * _mutateRatio)),
                 attackWeakWeighting = moveScoreWeightings.attackWeakWeighting + random.Next((int)(_initialiseMin * _mutateRatio), (int)(_initialiseMax * _mutateRatio)),
-                attackStrongWeighting = moveScoreWeightings.attackStrongWeighting + random.Next((int)(_initialiseMin * _mutateRatio), (int)(_initialiseMax * _mutateRatio))
+                attackStrongWeighting = moveScoreWeightings.attackStrongWeighting + random.Next((int)(_initialiseMin * _mutateRatio), (int)(_initialiseMax * _mutateRatio)),
+                moveTowardEnemyWeighting = moveScoreWeightings.moveTowardEnemyWeighting + random.Next((int)(_initialiseMin * _mutateRatio), (int)(_initialiseMax * _mutateRatio)),
+                chancePickingRandomMove = moveScoreWeightings.chancePickingRandomMove + random.Next((int)(_initialiseMin * _mutateRatio), (int)(_initialiseMax * _mutateRatio))
             };
         }
 
@@ -61,6 +67,8 @@ namespace MathsJourney.ColourWars
             childMoveScoreWeighting.attackWeighting = BreedParameter(moveScoreWeightings1.attackWeighting, moveScoreWeightings2.attackWeighting);
             childMoveScoreWeighting.attackWeakWeighting = BreedParameter(moveScoreWeightings1.attackWeakWeighting, moveScoreWeightings2.attackWeakWeighting);
             childMoveScoreWeighting.attackStrongWeighting = BreedParameter(moveScoreWeightings1.attackStrongWeighting, moveScoreWeightings2.attackStrongWeighting);
+            childMoveScoreWeighting.moveTowardEnemyWeighting = BreedParameter(moveScoreWeightings1.moveTowardEnemyWeighting, moveScoreWeightings2.moveTowardEnemyWeighting);
+            childMoveScoreWeighting.chancePickingRandomMove = BreedParameter(moveScoreWeightings1.chancePickingRandomMove, moveScoreWeightings2.chancePickingRandomMove);
 
             return childMoveScoreWeighting;
         }

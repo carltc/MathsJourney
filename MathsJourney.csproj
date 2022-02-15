@@ -109,6 +109,7 @@
     </Compile>
     <Compile Include="ColourWars\LearningResults.cs" />
     <Compile Include="ColourWars\MoveScoreWeightings.cs" />
+    <Compile Include="ColourWars\Player.cs" />
     <Compile Include="ColourWars\PlayerMove.cs" />
     <Compile Include="DrawingHelper.cs" />
     <Compile Include="MainMenu.cs">
